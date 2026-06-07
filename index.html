@@ -9,13 +9,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { font-family: 'Sarabun', sans-serif; }
-        /* ซ่อน Scrollbar สำหรับหน้าจอที่ยาวเกินไป */
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen pb-24"> <div class="max-w-md mx-auto p-4 w-full">
+<body class="bg-slate-100 min-h-screen pb-24">
+    <div class="max-w-md mx-auto p-4 w-full">
         
-        <div id="tab-profile" class="tab-content">
+        <div id="statusMessage" class="text-center text-gray-400 py-6 text-sm italic">
+            กำลังดึงข้อมูลโปรไฟล์จาก LINE...
+        </div>
+
+        <div id="tab-profile" class="tab-content hidden">
             <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-4 border-t-8 border-blue-600">
                 <div class="p-6">
                     <div class="flex flex-col items-center mb-6">
@@ -25,24 +29,17 @@
                             </div>
                             <img id="lineProfileImg" src="" alt="Profile" class="absolute inset-0 w-full h-full object-cover hidden">
                         </div>
-                        
-                        <h2 id="empName" class="text-xl font-bold text-gray-800 text-center">กำลังโหลดข้อมูล...</h2>
-                        
+                        <h2 id="empName" class="text-xl font-bold text-gray-800 text-center">-</h2>
                         <p class="text-xs text-gray-400 mt-1 flex items-center">
                             <i class="fa-brands fa-line text-green-500 mr-1 text-sm"></i> ชื่อ LINE: <span id="lineDisplayName" class="ml-1 font-medium">-</span>
                         </p>
-                        
                         <p class="text-blue-600 font-semibold text-sm mt-2">
                             <span id="empPosition">-</span><span id="empLevel"></span>
                         </p>
                         <p id="empType" class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full mt-2 font-medium">-</p>
                     </div>
 
-                    <div id="statusMessage" class="text-center text-gray-400 py-6 text-sm italic">
-                        กำลังดึงข้อมูลโปรไฟล์จาก LINE...
-                    </div>
-
-                    <div id="infoCard" class="space-y-3 text-sm hidden">
+                    <div class="space-y-3 text-sm">
                         <div class="flex justify-between border-b pb-2">
                             <span class="text-gray-500"><i class="fa-solid fa-address-card mr-2 w-5"></i>เลขบัตรประชาชน</span>
                             <span id="empCitizenId" class="text-gray-800 font-semibold">-</span>
@@ -96,6 +93,52 @@
             </div>
         </div>
 
+        <div id="tab-salary" class="tab-content hidden">
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-4 border-t-8 border-amber-500">
+                <div class="p-6">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fa-solid fa-money-check-dollar text-2xl text-amber-500"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800">ข้อมูลเงินเดือนปัจจุบัน</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">รายการเงินค่าตอบแทนและสิทธิประโยชน์ส่วนบุคคล</p>
+                    </div>
+
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-600">เงินค่าตอบแทน</span>
+                            <span id="salCompensation" class="text-gray-800 font-semibold">0.00 ฿</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-600">เงินเพิ่มค่าครองชีพชั่วคราว</span>
+                            <span id="salCostOfLiving" class="text-gray-800 font-semibold">0.00 ฿</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-600">เงินประจำตำแหน่ง</span>
+                            <span id="salPosition" class="text-gray-800 font-semibold">0.00 ฿</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-600">เงินวิทยฐานะ</span>
+                            <span id="salAcademic" class="text-gray-800 font-semibold">0.00 ฿</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-600">ค่าตอบแทนนอกเหนือจากเงินเดือน</span>
+                            <span id="salExtra" class="text-gray-800 font-semibold">0.00 ฿</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-600">เงินค่าตอบแทนเสี่ยงภัย</span>
+                            <span id="salHazardous" class="text-gray-800 font-semibold">0.00 ฿</span>
+                        </div>
+                        
+                        <div class="flex justify-between pt-2 mt-4 bg-amber-50 p-3 rounded-xl">
+                            <span class="text-amber-800 font-bold">รวมเงินตอบแทนปัจจุบัน</span>
+                            <span id="salTotal" class="text-amber-700 font-black text-base">0.00 ฿</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="tab-contact" class="tab-content hidden">
             <div class="bg-white rounded-3xl shadow-xl p-6 border-t-8 border-green-600">
                 <div class="text-center mb-6">
@@ -105,24 +148,16 @@
                     <h3 class="text-lg font-bold text-gray-800">ติดต่อฝ่ายทรัพยากรบุคคล</h3>
                     <p class="text-xs text-gray-400 mt-1">งานเจ้าหน้าที่และสวัสดิการ อบต.พลวงทอง</p>
                 </div>
-                
                 <div class="space-y-4">
-                    <a href="tel:038123456" class="flex items-center p-3 bg-gray-50 rounded-2xl border border-gray-100 hover:bg-gray-100 transition-all">
+                    <div class="flex items-center p-3 bg-gray-50 rounded-2xl border border-gray-100">
                         <i class="fa-solid fa-phone text-green-600 text-lg mr-4 w-6 text-center"></i>
                         <div>
                             <p class="text-sm font-semibold text-gray-800">เบอร์โทรศัพท์สำนักงาน</p>
-                            <p class="text-xs text-gray-500">038-XXX-XXX (ต่อ งานทรัพยากรบุคคล)</p>
-                        </div>
-                    </a>
-                    <div class="flex items-center p-3 bg-gray-50 rounded-2xl border border-gray-100">
-                        <i class="fa-solid fa-envelope text-red-500 text-lg mr-4 w-6 text-center"></i>
-                        <div>
-                            <p class="text-sm font-semibold text-gray-800">อีเมลติดต่อราชการ</p>
-                            <p class="text-xs text-gray-500">hr@pluangthong.go.th</p>
+                            <p class="text-xs text-gray-500">ติดต่อ งานทรัพยากรบุคคล อบต.พลวงทอง</p>
                         </div>
                     </div>
                     <div class="p-4 bg-blue-50 text-blue-800 rounded-2xl text-xs leading-relaxed">
-                        <i class="fa-solid fa-circle-info mr-1"></i> <strong>หมายเหตุ:</strong> หากข้อมูลประวัติ หรือการคำนวณอายุราชการในหน้าแรกไม่ถูกต้อง กรุณาติดต่อแจ้งงานสิทธิและประวัติเพื่อดำเนินการอัปเดตฐานข้อมูล Google Sheets ครับ
+                        <i class="fa-solid fa-circle-info mr-1"></i> <strong>หมายเหตุ:</strong> หากข้อมูลรายการเงินค่าตอบแทนปัจจุบันไม่ถูกต้องหรือไม่อัปเดต สามารถประสานงานเจ้าหน้าที่ผู้ดูแลระบบสลิปเพื่อปรับปรุงข้อมูลในฐานข้อมูลหลักได้ครับ
                     </div>
                 </div>
             </div>
@@ -133,53 +168,50 @@
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl rounded-t-2xl z-50">
         <div class="max-w-md mx-auto flex justify-around items-center h-16">
             
-            <button onclick="switchTab('tab-profile', this)" id="btn-profile" class="flex flex-col items-center justify-center w-full h-full text-blue-600 transition-all">
+            <button onclick="switchTab('tab-profile', this)" id="btn-profile" class="flex flex-col items-center justify-center w-full h-full text-blue-600 font-bold transition-all">
                 <i class="fa-solid fa-address-card text-xl mb-1"></i>
-                <span class="text-[10px] font-bold">ประวัติข้อมูล</span>
+                <span class="text-[10px]">ประวัติข้อมูล</span>
             </button>
             
-            <button onclick="switchTab('tab-contact', this)" id="btn-contact" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-gray-600 transition-all">
+            <button onclick="switchTab('tab-salary', this)" id="btn-salary" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
+                <i class="fa-solid fa-money-check-dollar text-xl mb-1"></i>
+                <span class="text-[10px]">เงินเดือนปัจจุบัน</span>
+            </button>
+            
+            <button onclick="switchTab('tab-contact', this)" id="btn-contact" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
                 <i class="fa-solid fa-circle-user text-xl mb-1"></i>
-                <span class="text-[10px] font-medium">ติดต่อ HR</span>
+                <span class="text-[10px]">ติดต่อ HR</span>
             </button>
             
-            <button onclick="closeLiff()" class="flex flex-col items-center justify-center w-full h-full text-red-400 hover:text-red-600 transition-all">
+            <button onclick="liff.closeWindow()" class="flex flex-col items-center justify-center w-full h-full text-red-400 transition-all">
                 <i class="fa-solid fa-arrow-right-from-bracket text-xl mb-1"></i>
-                <span class="text-[10px] font-medium">ออก</span>
+                <span class="text-[10px]">ออก</span>
             </button>
             
         </div>
     </div>
 
     <script>
-        // ⚠️ ใส่ URL เว็บแอป GAS และ LIFF ID ของคุณตรงนี้
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx1GUmuTWCqA6yMJHY_ygdotjPBIOah-lFT9AI-RgkxSRpGqhDgTmKJcC9spo6_bxxV6Q/exec";
         const LIFF_ID = "2010314411-PgXLiLAk";
         
         let lineUserId = "";
 
-        // ฟังก์ชันสลับแท็บเมนูด้านล่าง
         function switchTab(tabId, buttonElement) {
-            // ซ่อนเนื้อหาทุกหน้าก่อน
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-            // แสดงเนื้อหาของแท็บที่เลือก
             document.getElementById(tabId).classList.remove('hidden');
 
-            // รีเซ็ตสีปุ่มเมนูทั้งหมดให้เป็นสีเทา (Inactive)
             document.getElementById('btn-profile').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
+            document.getElementById('btn-salary').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
             document.getElementById('btn-contact').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
 
-            // ไฮไลท์ปุ่มที่ถูกกดให้เป็นสีน้ำเงิน (Active)
             if(tabId === 'tab-profile') {
                 buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-blue-600 font-bold transition-all";
+            } else if(tabId === 'tab-salary') {
+                buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-amber-500 font-bold transition-all";
             } else if(tabId === 'tab-contact') {
                 buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-green-600 font-bold transition-all";
             }
-        }
-
-        // ฟังก์ชันปิดหน้าจอ LIFF ทันที
-        function closeLiff() {
-            liff.closeWindow();
         }
 
         async function initLiff() {
@@ -214,10 +246,11 @@
 
                 if (result.status === "success") {
                     document.getElementById("statusMessage").classList.add("hidden");
-                    document.getElementById("infoCard").classList.remove("hidden");
+                    document.getElementById("tab-profile").classList.remove("hidden"); // แสดงหน้าแรก
                     
                     const d = result.data;
                     
+                    // 1. ผูกข้อมูลหน้าประวัติส่วนตัว
                     document.getElementById("empCitizenId").innerText = d["เลขบัตรประชาชน"] || "-";
                     document.getElementById("empName").innerText = d["ชื่อ-นามสกุล"] || "-";
                     document.getElementById("empType").innerText = d["ประเภท"] || "-";
@@ -236,9 +269,25 @@
                     document.getElementById("empServiceTime").innerText = d["อายุราชการ"] || "-";
                     document.getElementById("empRetireDate").innerText = d["วันเกษียณอายุ"] || "-";
                     
+                    // 2. ผูกข้อมูลหน้าเงินเดือนปัจจุบัน (ดึงตามชื่อคอลลัมน์ที่คุณกำหนด)
+                    const nComp = Number(d["เงินค่าตอบแทน"] || 0);
+                    const nCol = Number(d["เงินเพิ่มค่าครองชีพชั่วคราว"] || 0);
+                    const nPos = Number(d["เงินประจำตำแหน่ง"] || 0);
+                    const nAcad = Number(d["เงินวิทยฐานะ"] || 0);
+                    const nExtra = Number(d["ค่าตอบแทนนอกเหนือจากเงินเดือน"] || 0);
+                    const nHazard = Number(d["เงินค่าตอบแทนเสี่ยงภัย"] || 0);
+                    const nTotal = nComp + nCol + nPos + nAcad + nExtra + nHazard;
+
+                    document.getElementById("salCompensation").innerText = nComp.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
+                    document.getElementById("salCostOfLiving").innerText = nCol.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
+                    document.getElementById("salPosition").innerText = nPos.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
+                    document.getElementById("salAcademic").innerText = nAcad.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
+                    document.getElementById("salExtra").innerText = nExtra.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
+                    document.getElementById("salHazardous").innerText = nHazard.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
+                    document.getElementById("salTotal").innerText = nTotal.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
+                    
                 } else {
                     document.getElementById("statusMessage").innerText = result.message;
-                    document.getElementById("empName").innerText = "ไม่พบข้อมูลประวัติ";
                 }
             } catch (error) {
                 document.getElementById("statusMessage").innerText = "ไม่สามารถติดต่อฐานข้อมูลได้";
