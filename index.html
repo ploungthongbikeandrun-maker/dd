@@ -2,496 +2,114 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ระบบเช็คเงินเดือน</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #f0f2f5;
-            min-height: 100vh;
-        }
-        
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #06C755 0%, #05a346 100%);
-            color: white;
-            padding: 24px 20px;
-            border-radius: 0 0 24px 24px;
-            margin-bottom: 20px;
-        }
-        
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-        
-        .header p {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-        
-        .logout-btn {
-            float: right;
-            background: rgba(255,255,255,0.2);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .logout-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-        
-        /* Container */
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 0 16px;
-        }
-        
-        /* Card */
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        
-        /* Form Elements */
-        .select-box {
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            margin: 12px 0;
-            font-family: inherit;
-        }
-        
-        button {
-            width: 100%;
-            padding: 14px;
-            background: #06C755;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-        
-        button:active {
-            transform: scale(0.98);
-            background: #05a346;
-        }
-        
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        
-        /* Payslip */
-        .payslip {
-            background: #f9f9f9;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 16px;
-            border-left: 4px solid #06C755;
-        }
-        
-        .payslip h3 {
-            color: #06C755;
-            margin-bottom: 16px;
-            font-size: 18px;
-        }
-        
-        .row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .row:last-child {
-            border-bottom: none;
-        }
-        
-        .total {
-            font-weight: bold;
-            font-size: 18px;
-            color: #06C755;
-            margin-top: 8px;
-            border-top: 2px solid #ddd;
-            padding-top: 12px;
-        }
-        
-        /* Loading */
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-        
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #06C755;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Error */
-        .error {
-            background: #fee;
-            color: #c00;
-            padding: 12px;
-            border-radius: 12px;
-            margin-top: 12px;
-            font-size: 14px;
-        }
-        
-        /* Login Button */
-        .login-btn {
-            background: #06C755;
-            text-align: center;
-            padding: 16px;
-            border-radius: 48px;
-            text-decoration: none;
-            display: block;
-            margin-top: 20px;
-        }
-        
-        .info-text {
-            color: #666;
-            font-size: 14px;
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        /* Utility */
-        .text-center {
-            text-align: center;
-        }
-        
-        .mt-4 {
-            margin-top: 16px;
-        }
-        
-        .hidden {
-            display: none;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบเช็คเงินเดือนพนักงาน</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
-    <div id="app">
-        <!-- Content will be injected here -->
+<body class="bg-gray-100 p-4">
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6 mt-6">
+        <h2 class="text-2xl font-bold text-center text-green-600 mb-4">สลิปเงินเดือนออนไลน์</h2>
+        
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">เลือกเดือนที่ต้องการตรวจสอบ:</label>
+            <select id="monthSelect" class="w-full p-2 border border-gray-300 rounded-lg" onchange="fetchSalary()">
+                <option value="มกราคม 2026">มกราคม 2026</option>
+                <option value="กุมภาพันธ์ 2026">กุมภาพันธ์ 2026</option>
+                <option value="มีนาคม 2026">มีนาคม 2026</option>
+            </select>
+        </div>
+
+        <hr class="my-4 border-gray-200">
+
+        <div id="salaryCard" class="hidden">
+            <p class="text-gray-600"><strong>ชื่อ-นามสกุล:</strong> <span id="empName"></span></p>
+            <p class="text-gray-600 mb-4"><strong>รหัสพนักงาน:</strong> <span id="empId"></span></p>
+            
+            <div class="bg-green-50 p-3 rounded-lg mb-2">
+                <span class="text-gray-700 font-semibold">รายรับรวม:</span>
+                <div class="flex justify-between text-sm text-gray-600 mt-1">
+                    <span>เงินเดือนหลัก:</span> <span id="mainSalary">0</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span>ค่าตำแหน่ง/OT:</span> <span id="allowance">0</span>
+                </div>
+            </div>
+
+            <div class="bg-red-50 p-3 rounded-lg mb-4">
+                <span class="text-gray-700 font-semibold">รายจ่าย/หัก:</span>
+                <div class="flex justify-between text-sm text-gray-600 mt-1">
+                    <span>ประกันสังคม:</span> <span id="sso">0</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span>ภาษีหัก ณ ที่จ่าย:</span> <span id="tax">0</span>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-dashed pt-3 flex justify-between items-center">
+                <span class="text-lg font-bold text-gray-800">รายรับสุทธิ:</span>
+                <span class="text-2xl font-bold text-green-600" id="netSalary">0 บาท</span>
+            </div>
+        </div>
+
+        <div id="statusMessage" class="text-center text-gray-500 my-4">กำลังโหลดข้อมูลโปรไฟล์ LINE...</div>
     </div>
-    
+
     <script>
-        // ========================
-        // การตั้งค่า (แก้ไขให้ตรงกับของคุณ)
-        // ========================
-        const CONFIG = {
-            GAS_WEBAPP_URL: 'https://script.google.com/macros/s/AKfycbx1GUmuTWCqA6yMJHY_ygdotjPBIOah-lFT9AI-RgkxSRpGqhDgTmKJcC9spo6_bxxV6Q/exec',
-            LIFF_ID: '2010314411-PgXLiLAk',
-            CHANNEL_ID: '1657311776'  // สำหรับ OAuth
-        };
-        
-        // สถานะของแอป
-        let appState = {
-            isLoggedIn: false,
-            userId: null,
-            userName: null,
-            sessionId: null,
-            months: []
-        };
-        
-        // Helper: เรียก GAS API
-        async function callGAS(action, data = {}) {
-            const payload = {
-                action: action,
-                sessionId: appState.sessionId,
-                ...data
-            };
-            
+        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx1GUmuTWCqA6yMJHY_ygdotjPBIOah-lFT9AI-RgkxSRpGqhDgTmKJcC9spo6_bxxV6Q/exec";
+        let lineUserId = "";
+
+        async function initLiff() {
             try {
-                const response = await fetch(CONFIG.GAS_WEBAPP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // จำเป็นสำหรับ GAS
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams(payload)
-                });
-                
-                // เนื่องจาก no-cors mode ไม่สามารถอ่าน response ได้
-                // ต้องใช้วิธีอื่น - ดูหมายเหตุด้านล่าง
-                return await response.text();
-            } catch (error) {
-                console.error('Error calling GAS:', error);
-                throw error;
-            }
-        }
-        
-        // ตรวจสอบ session จาก URL
-        function checkSessionFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const sessionId = urlParams.get('sessionId');
-            const userId = urlParams.get('userId');
-            const userName = urlParams.get('userName');
-            
-            if (sessionId && userId) {
-                appState.isLoggedIn = true;
-                appState.sessionId = sessionId;
-                appState.userId = userId;
-                appState.userName = userName || 'พนักงาน';
-                return true;
-            }
-            
-            // ตรวจสอบ localStorage
-            const savedSession = localStorage.getItem('payroll_session');
-            if (savedSession) {
-                try {
-                    const session = JSON.parse(savedSession);
-                    if (session.expiry > Date.now()) {
-                        appState.isLoggedIn = true;
-                        appState.sessionId = session.sessionId;
-                        appState.userId = session.userId;
-                        appState.userName = session.userName;
-                        return true;
-                    }
-                } catch(e) {}
-            }
-            
-            return false;
-        }
-        
-        // เริ่ม OAuth Login
-        function startLogin() {
-            const redirectUri = window.location.origin + window.location.pathname;
-            const loginUrl = 'https://access.line.me/oauth2/v2.1/authorize?' +
-                'response_type=code&' +
-                'client_id=' + CONFIG.CHANNEL_ID + '&' +
-                'redirect_uri=' + encodeURIComponent(redirectUri) + '&' +
-                'scope=profile%20openid&' +
-                'state=' + Math.random().toString(36).substring(7);
-            
-            window.location.href = loginUrl;
-        }
-        
-        // Logout
-        function logout() {
-            localStorage.removeItem('payroll_session');
-            appState.isLoggedIn = false;
-            appState.sessionId = null;
-            appState.userId = null;
-            appState.userName = null;
-            
-            // ลบ query params
-            const url = new URL(window.location.href);
-            url.search = '';
-            window.history.replaceState({}, '', url);
-            
-            render();
-        }
-        
-        // โหลดรายการเดือนที่มีข้อมูล
-        async function loadMonths() {
-            if (!appState.sessionId) return;
-            
-            try {
-                const response = await fetch(CONFIG.GAS_WEBAPP_URL + '?action=getMonths&sessionId=' + appState.sessionId);
-                const data = await response.json();
-                
-                if (data.success) {
-                    appState.months = data.months;
-                    renderDashboard();
-                }
-            } catch (error) {
-                console.error('Error loading months:', error);
-            }
-        }
-        
-        // ตรวจสอบเงินเดือน
-        async function checkSalary(month, year) {
-            const resultDiv = document.getElementById('salaryResult');
-            resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div>กำลังค้นหาข้อมูล...</div>';
-            
-            try {
-                const response = await fetch(CONFIG.GAS_WEBAPP_URL + '?action=getSalary&sessionId=' + appState.sessionId + '&month=' + month + '&year=' + year);
-                const data = await response.json();
-                
-                if (data.success) {
-                    resultDiv.innerHTML = `
-                        <div class="payslip">
-                            <h3>🧾 สลิปเงินเดือน ${data.month}/${data.year}</h3>
-                            <div class="row">
-                                <span>👤 พนักงาน:</span>
-                                <span><strong>${data.fullName}</strong></span>
-                            </div>
-                            <div class="row">
-                                <span>💰 เงินเดือนรวม:</span>
-                                <span>${Number(data.grossPay).toLocaleString()} บาท</span>
-                            </div>
-                            <div class="row">
-                                <span>📉 หัก (ภาษี/ประกันสังคม):</span>
-                                <span>${Number(data.deduction).toLocaleString()} บาท</span>
-                            </div>
-                            <div class="row total">
-                                <span>✅ เงินสุทธิ:</span>
-                                <span>${Number(data.netPay).toLocaleString()} บาท</span>
-                            </div>
-                            <div class="row">
-                                <span>📌 สถานะ:</span>
-                                <span>${data.status || 'จ่ายแล้ว'}</span>
-                            </div>
-                        </div>
-                    `;
+                // ใส่ LIFF ID ที่ได้จาก LINE Developers Console
+                await liff.init({ liffId: "2010314411-PgXLiLAk" }); 
+                if (liff.isLoggedIn()) {
+                    const profile = await liff.getProfile();
+                    lineUserId = profile.userId;
+                    document.getElementById("statusMessage").innerText = "เลือกเดือนเพื่อดูข้อมูลสลิป";
+                    fetchSalary(); // เรียกดูเดือนแรกที่ตั้งค่าไว้ทันที
                 } else {
-                    resultDiv.innerHTML = `<div class="error">⚠️ ${data.error}</div>`;
+                    liff.login();
                 }
             } catch (error) {
-                resultDiv.innerHTML = `<div class="error">⚠️ เกิดข้อผิดพลาด กรุณาลองอีกครั้ง</div>`;
+                console.error("LIFF Initialization failed", error);
+                document.getElementById("statusMessage").innerText = "เกิดข้อผิดพลาดในการโหลดระบบ LINE";
             }
         }
-        
-        // Render หน้า Login
-        function renderLogin() {
-            return `
-                <div class="container">
-                    <div class="header">
-                        <h1>💰 ระบบเช็คเงินเดือน</h1>
-                        <p>ตรวจสอบสลิปเงินเดือนได้ง่ายๆ ผ่าน LINE</p>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="text-center">
-                            <div style="font-size: 48px; margin-bottom: 16px;">📱</div>
-                            <h3>เข้าสู่ระบบด้วย LINE</h3>
-                            <p style="color: #666; margin-top: 8px;">คลิกปุ่มด้านล่างเพื่อยืนยันตัวตน</p>
-                            <button onclick="startLogin()" style="background: #06C755; margin-top: 20px;">
-                                🔑 เข้าสู่ระบบด้วย LINE
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="info-text">
-                        ⚠️ ข้อมูลเงินเดือนเป็นความลับ<br>
-                        กรุณาอย่าแชร์รหัสหรือข้อมูลส่วนตัวกับผู้อื่น
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Render Dashboard
-        function renderDashboard() {
-            const monthOptions = appState.months.map(m => 
-                `<option value="${m.month},${m.year}">${m.label}</option>`
-            ).join('');
+
+        async function fetchSalary() {
+            if (!lineUserId) return;
             
-            return `
-                <div class="container">
-                    <div class="header">
-                        <span class="logout-btn" onclick="logout()">🚪 ออกจากระบบ</span>
-                        <h1>💰 ระบบเช็คเงินเดือน</h1>
-                        <p>สวัสดี <strong>${appState.userName}</strong></p>
-                    </div>
+            const selectedMonth = document.getElementById("monthSelect").value;
+            document.getElementById("statusMessage").innerText = "กำลังดึงข้อมูลเงินเดือน...";
+            document.getElementById("salaryCard").classList.add("hidden");
+
+            try {
+                const response = await fetch(`${GAS_API_URL}?userId=${lineUserId}&month=${selectedMonth}`);
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    document.getElementById("statusMessage").innerText = "";
+                    document.getElementById("salaryCard").classList.remove("hidden");
                     
-                    <div class="card">
-                        <h3>📅 เลือกเดือนที่ต้องการดู</h3>
-                        <select id="monthSelect" class="select-box">
-                            <option value="">-- เลือกเดือน/ปี --</option>
-                            ${monthOptions}
-                        </select>
-                        <button onclick="checkSelectedSalary()">
-                            🔍 ตรวจสอบเงินเดือน
-                        </button>
-                        <div id="salaryResult"></div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // ฟังก์ชันเรียก checkSalary จาก select
-        window.checkSelectedSalary = function() {
-            const select = document.getElementById('monthSelect');
-            if (!select || !select.value) {
-                document.getElementById('salaryResult').innerHTML = '<div class="error">⚠️ กรุณาเลือกเดือนก่อน</div>';
-                return;
-            }
-            const [month, year] = select.value.split(',');
-            checkSalary(month, year);
-        };
-        
-        // Main render function
-        function render() {
-            const appDiv = document.getElementById('app');
-            if (!appState.isLoggedIn) {
-                appDiv.innerHTML = renderLogin();
-            } else {
-                appDiv.innerHTML = renderDashboard();
-                loadMonths();
-            }
-        }
-        
-        // เริ่มต้นแอป
-        (function init() {
-            if (checkSessionFromURL()) {
-                render();
-            } else {
-                // ตรวจสอบ authorization code จาก LINE
-                const urlParams = new URLSearchParams(window.location.search);
-                const code = urlParams.get('code');
-                
-                if (code) {
-                    // ส่ง code ไปยัง GAS
-                    fetch(CONFIG.GAS_WEBAPP_URL + '?action=exchange&code=' + code + '&redirectUri=' + encodeURIComponent(window.location.origin + window.location.pathname))
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // บันทึก session
-                                const session = {
-                                    sessionId: data.sessionId,
-                                    userId: data.userId,
-                                    userName: data.userName,
-                                    expiry: Date.now() + 1800000 // 30 นาที
-                                };
-                                localStorage.setItem('payroll_session', JSON.stringify(session));
-                                
-                                // redirect กลับมาที่หน้าเดิมโดยไม่มี code
-                                window.location.href = window.location.origin + window.location.pathname;
-                            } else {
-                                alert('Login failed: ' + data.error);
-                                window.location.href = window.location.origin + window.location.pathname;
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Exchange error:', error);
-                            alert('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
-                        });
+                    // นำข้อมูลไปใส่ใน HTML Element
+                    document.getElementById("empName").innerText = result.data["ชื่อ-นามสกุล"];
+                    document.getElementById("empId").innerText = result.data["รหัสพนักงาน"];
+                    document.getElementById("mainSalary").innerText = Number(result.data["เงินเดือนหลัก"]).toLocaleString() + " บาท";
+                    document.getElementById("allowance").innerText = Number(result.data["ค่าตำแหน่ง"] + result.data["OT"]).toLocaleString() + " บาท";
+                    document.getElementById("sso").innerText = "-" + Number(result.data["ประกันสังคม"]).toLocaleString() + " บาท";
+                    document.getElementById("tax").innerText = "-" + Number(result.data["ภาษี"]).toLocaleString() + " บาท";
+                    document.getElementById("netSalary").innerText = Number(result.data["รายรับสุทธิ"]).toLocaleString() + " บาท";
                 } else {
-                    render();
+                    document.getElementById("statusMessage").innerText = result.message;
                 }
+            } catch (error) {
+                document.getElementById("statusMessage").innerText = "ไม่สามารถเชื่อมต่อฐานข้อมูลได้";
             }
-        })();
+        }
+
+        // เริ่มทำงานเมื่อเปิดหน้าเว็บ
+        initLiff();
     </script>
 </body>
 </html>
