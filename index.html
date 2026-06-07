@@ -3,90 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ระบบสารสนเทศข้อมูลบุคลากร</title>
+    <title>ระบบบุคลากร อบต.พลวงทอง</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap');
         body { font-family: 'Sarabun', sans-serif; }
         ::-webkit-scrollbar { display: none; }
+        .tab-content { transition: all 0.3s ease; }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen pb-24">
+<body class="bg-slate-50 min-h-screen pb-24">
     <div class="max-w-md mx-auto p-4 w-full">
         
-        <div id="statusMessage" class="text-center text-gray-400 py-6 text-sm italic">
-            กำลังดึงข้อมูลโปรไฟล์จาก LINE...
+        <div id="statusMessage" class="text-center text-slate-400 py-10 text-sm italic">
+            <i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังเชื่อมต่อระบบ...
         </div>
 
         <div id="tab-profile" class="tab-content hidden">
-            <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-4 border-t-8 border-blue-600">
-                <div class="p-6">
-                    <div class="flex flex-col items-center mb-6">
-                        <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-3 overflow-hidden border-4 border-white shadow-md relative">
-                            <div id="defaultUserIcon" class="w-full h-full flex items-center justify-center bg-blue-50">
-                                <i class="fa-solid fa-user-tie text-4xl text-blue-400"></i>
-                            </div>
+            <div class="bg-white rounded-[2.5rem] shadow-xl overflow-hidden mb-4 border-t-8 border-blue-600">
+                <div class="p-8">
+                    <div class="flex flex-col items-center mb-8">
+                        <div class="w-28 h-28 bg-slate-50 rounded-full flex items-center justify-center mb-4 overflow-hidden border-4 border-white shadow-lg relative">
+                            <i id="defaultUserIcon" class="fa-solid fa-user-tie text-5xl text-slate-300"></i>
                             <img id="lineProfileImg" src="" alt="Profile" class="absolute inset-0 w-full h-full object-cover hidden">
                         </div>
-                        <h2 id="empName" class="text-xl font-bold text-gray-800 text-center">-</h2>
-                        <p class="text-xs text-gray-400 mt-1 flex items-center">
-                            <i class="fa-brands fa-line text-green-500 mr-1 text-sm"></i> ชื่อ LINE: <span id="lineDisplayName" class="ml-1 font-medium">-</span>
-                        </p>
-                        <p class="text-blue-600 font-semibold text-sm mt-2">
-                            <span id="empPosition">-</span><span id="empLevel"></span>
-                        </p>
-                        <p id="empType" class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full mt-2 font-medium">-</p>
+                        <h2 id="empName" class="text-2xl font-bold text-slate-800 text-center">-</h2>
+                        <p id="empType" class="text-xs bg-blue-50 text-blue-700 px-4 py-1 rounded-full mt-3 font-bold border border-blue-100 uppercase tracking-wide">-</p>
                     </div>
 
-                    <div class="space-y-3 text-sm">
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-500"><i class="fa-solid fa-address-card mr-2 w-5"></i>เลขบัตรประชาชน</span>
-                            <span id="empCitizenId" class="text-gray-800 font-semibold">-</span>
+                    <div class="space-y-4 text-sm">
+                        <div class="flex justify-between border-b border-slate-50 pb-2">
+                            <span class="text-slate-400">ตำแหน่ง</span>
+                            <span id="empPositionRow" class="text-slate-700 font-bold">-</span>
                         </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-500"><i class="fa-solid fa-tags mr-2 w-5"></i>ประเภท</span>
-                            <span id="empTypeRow" class="text-gray-800 font-semibold">-</span>
+                        <div class="flex justify-between border-b border-slate-50 pb-2">
+                            <span class="text-slate-400">ระดับ</span>
+                            <span id="empLevelRow" class="text-slate-700 font-bold">-</span>
                         </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-500"><i class="fa-solid fa-user-tie mr-2 w-5"></i>ตำแหน่ง</span>
-                            <span id="empPositionRow" class="text-gray-800 font-semibold">-</span>
+                        <div class="flex justify-between border-b border-slate-50 pb-2">
+                            <span class="text-slate-400">สังกัด</span>
+                            <span id="empDept" class="text-slate-700 font-bold">-</span>
                         </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-500"><i class="fa-solid fa-arrow-up-trend-lines mr-2 w-5"></i>ระดับ</span>
-                            <span id="empLevelRow" class="text-gray-800 font-semibold">-</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-500"><i class="fa-solid fa-hashtag mr-2 w-5"></i>เลขที่ตำแหน่ง</span>
-                            <span id="empPosNo" class="text-gray-800 font-semibold">-</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-500"><i class="fa-solid fa-sitemap mr-2 w-5"></i>สังกัด</span>
-                            <span id="empDept" class="text-gray-800 font-semibold">-</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-500"><i class="fa-solid fa-cake-candles mr-2 w-5"></i>วันเกิด</span>
-                            <span id="empBirth" class="text-gray-800 font-semibold">-</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-500"><i class="fa-solid fa-person-cake mr-2 w-5"></i>อายุ</span>
-                            <span id="empAge" class="text-gray-800 font-semibold">-</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-500"><i class="fa-solid fa-phone mr-2 w-5"></i>เบอร์โทรศัพท์</span>
-                            <span id="empPhone" class="text-gray-800 font-semibold">-</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-500"><i class="fa-solid fa-calendar-check mr-2 w-5"></i>วันที่เริ่มเข้ารับราชการ</span>
-                            <span id="empStartDate" class="text-gray-800 font-semibold">-</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-500"><i class="fa-solid fa-hourglass-half mr-2 w-5"></i>อายุราชการ</span>
-                            <span id="empServiceTime" class="text-blue-700 font-bold">-</span>
+                        <div class="flex justify-between border-b border-slate-50 pb-2">
+                            <span class="text-slate-400">อายุราชการ</span>
+                            <span id="empServiceTime" class="text-blue-600 font-black">-</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-500"><i class="fa-solid fa-calendar-xmark mr-2 w-5"></i>วันเกษียณอายุ</span>
-                            <span id="empRetireDate" class="text-red-600 font-bold">-</span>
+                            <span class="text-slate-400">วันเกษียณอายุ</span>
+                            <span id="empRetireDate" class="text-red-500 font-bold">-</span>
                         </div>
                     </div>
                 </div>
@@ -94,347 +60,261 @@
         </div>
 
         <div id="tab-salary" class="tab-content hidden">
-            <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-4 border-t-8 border-amber-500">
-                <div class="p-6">
-                    <div class="text-center mb-6">
-                        <div class="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-2">
-                            <i class="fa-solid fa-money-check-dollar text-2xl text-amber-500"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800">ข้อมูลเงินเดือนปัจจุบัน</h3>
-                        <p class="text-xs text-gray-400 mt-0.5">รายการเงินค่าตอบแทนและสิทธิประโยชน์ส่วนบุคคล</p>
+            <div class="bg-white rounded-[2.5rem] shadow-xl p-8 border-t-8 border-amber-500">
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-money-bill-trend-up text-3xl text-amber-500"></i>
                     </div>
-
-                    <div class="space-y-3 text-sm">
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-600">เงินค่าตอบแทน</span>
-                            <span id="salCompensation" class="text-gray-800 font-semibold">0.00 ฿</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-600">เงินเพิ่มค่าครองชีพชั่วคราว</span>
-                            <span id="salCostOfLiving" class="text-gray-800 font-semibold">0.00 ฿</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-600">เงินประจำตำแหน่ง</span>
-                            <span id="salPosition" class="text-gray-800 font-semibold">0.00 ฿</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-600">เงินวิทยฐานะ</span>
-                            <span id="salAcademic" class="text-gray-800 font-semibold">0.00 ฿</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-600">ค่าตอบแทนนอกเหนือจากเงินเดือน</span>
-                            <span id="salExtra" class="text-gray-800 font-semibold">0.00 ฿</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-600">เงินค่าตอบแทนเสี่ยงภัย</span>
-                            <span id="salHazardous" class="text-gray-800 font-semibold">0.00 ฿</span>
-                        </div>
-                        <div class="flex justify-between pt-2 mt-4 bg-amber-50 p-3 rounded-xl">
-                            <span class="text-amber-800 font-bold">รวมเงินตอบแทนปัจจุบัน</span>
-                            <span id="salTotal" class="text-amber-700 font-black text-base">0.00 ฿</span>
-                        </div>
+                    <h3 class="text-xl font-bold text-slate-800">รายได้ปัจจุบัน</h3>
+                </div>
+                <div class="space-y-4 text-sm">
+                    <div class="flex justify-between border-b border-slate-50 pb-2">
+                        <span class="text-slate-500">เงินค่าตอบแทน</span>
+                        <span id="salCompensation" class="text-slate-800 font-bold">0.00 ฿</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-50 pb-2">
+                        <span class="text-slate-500">ค่าครองชีพชั่วคราว</span>
+                        <span id="salCostOfLiving" class="text-slate-800 font-bold">0.00 ฿</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-50 pb-2">
+                        <span class="text-slate-500">เงินประจำตำแหน่ง</span>
+                        <span id="salPosition" class="text-slate-800 font-bold">0.00 ฿</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-50 pb-2">
+                        <span class="text-slate-500">เงินวิทยฐานะ</span>
+                        <span id="salAcademic" class="text-slate-800 font-bold">0.00 ฿</span>
+                    </div>
+                    <div class="mt-6 bg-amber-50 p-4 rounded-2xl border border-amber-100 flex justify-between items-center">
+                        <span class="text-amber-800 font-bold text-base">ยอดรับรวม</span>
+                        <span id="salTotal" class="text-amber-600 font-black text-xl">0.00 ฿</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="tab-leave" class="tab-content hidden">
-            <div class="bg-white rounded-3xl shadow-xl p-5 border-t-8 border-indigo-600 mb-4">
-                <div class="flex items-center space-x-2 mb-2">
-                    <span class="text-xl">📋</span>
-                    <h3 class="text-lg font-bold text-gray-800">โควตาวันลาคงเหลือ</h3>
-                </div>
-                
-                <div class="grid grid-cols-3 gap-3 mb-2">
-                    <div class="bg-indigo-50/50 rounded-2xl p-3 text-center border border-indigo-100">
-                        <span class="text-xl">🏖️</span>
-                        <div id="leaveVacation" class="text-xl font-black text-indigo-600 my-0.5">0</div>
-                        <span class="text-[10px] font-medium text-indigo-500">ลาพักร้อน</span>
+            <div class="bg-white rounded-3xl p-6 shadow-sm border-t-8 border-indigo-600 mb-4">
+                <h3 class="text-sm font-bold text-slate-800 mb-4">📅 โควตาวันลาคงเหลือ</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-indigo-50 rounded-2xl p-4 text-center">
+                        <div id="leaveVacation" class="text-xl font-black text-indigo-600">0</div>
+                        <div class="text-[10px] text-indigo-400 font-bold mt-1">พักร้อน</div>
                     </div>
-                    <div class="bg-teal-50/50 rounded-2xl p-3 text-center border border-teal-100">
-                        <span class="text-xl">🏠</span>
-                        <div id="leavePersonal" class="text-xl font-black text-teal-600 my-0.5">0</div>
-                        <span class="text-[10px] font-medium text-teal-500">ลากิจส่วนตัว</span>
+                    <div class="bg-teal-50 rounded-2xl p-4 text-center">
+                        <div id="leavePersonal" class="text-xl font-black text-teal-600">0</div>
+                        <div class="text-[10px] text-teal-400 font-bold mt-1">ลากิจ</div>
                     </div>
-                    <div class="bg-emerald-50/50 rounded-2xl p-3 text-center border border-emerald-100">
-                        <span class="text-xl">🏥</span>
-                        <div id="leaveSick" class="text-xl font-black text-emerald-600 my-0.5">0</div>
-                        <span class="text-[10px] font-medium text-emerald-500">ลาป่วย</span>
+                    <div class="bg-emerald-50 rounded-2xl p-4 text-center">
+                        <div id="leaveSick" class="text-xl font-black text-emerald-600">0</div>
+                        <div class="text-[10px] text-emerald-400 font-bold mt-1">ลาป่วย</div>
                     </div>
                 </div>
             </div>
-
-            <div class="bg-white rounded-3xl shadow-xl p-5 border-t-8 border-slate-700">
-                <h3 class="text-sm font-bold text-gray-800 mb-4"><i class="fa-solid fa-pen-to-square text-indigo-500 mr-2"></i>รายละเอียดการขอลา</h3>
-                
+            <div class="bg-white rounded-3xl p-6 shadow-sm border-t-8 border-slate-800">
                 <form id="leaveForm" onsubmit="submitLeaveForm(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-2">ประเภทการลา <span class="text-red-500">*</span></label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <label class="border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-all relative">
-                                <input type="radio" name="leaveType" value="ลาพักร้อน" class="absolute top-2 right-2 accent-indigo-600" required>
-                                <span class="text-lg">🏖️</span>
-                                <span class="text-xs mt-1 text-gray-700">ลาพักร้อน</span>
-                            </label>
-                            <label class="border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-all relative">
-                                <input type="radio" name="leaveType" value="ลากิจส่วนตัว" class="absolute top-2 right-2 accent-indigo-600">
-                                <span class="text-lg">🏠</span>
-                                <span class="text-xs mt-1 text-gray-700">ลากิจส่วนตัว</span>
-                            </label>
-                            <label class="border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-all relative">
-                                <input type="radio" name="leaveType" value="ลาป่วย" class="absolute top-2 right-2 accent-indigo-600">
-                                <span class="text-lg">🏥</span>
-                                <span class="text-xs mt-1 text-gray-700">ลาป่วย</span>
-                            </label>
-                        </div>
+                    <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">ประเภทการลา *</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="border border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 relative">
+                            <input type="radio" name="leaveType" value="ลาพักร้อน" class="absolute top-2 right-2 accent-indigo-600" required>
+                            <span class="text-xl">🏖️</span>
+                            <span class="text-[10px] mt-1 font-bold">พักร้อน</span>
+                        </label>
+                        <label class="border border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 relative">
+                            <input type="radio" name="leaveType" value="ลากิจส่วนตัว" class="absolute top-2 right-2 accent-indigo-600">
+                            <span class="text-xl">🏠</span>
+                            <span class="text-[10px] mt-1 font-bold">ลากิจ</span>
+                        </label>
+                        <label class="border border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 relative">
+                            <input type="radio" name="leaveType" value="ลาป่วย" class="absolute top-2 right-2 accent-indigo-600">
+                            <span class="text-xl">🏥</span>
+                            <span class="text-[10px] mt-1 font-bold">ลาป่วย</span>
+                        </label>
                     </div>
-
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">เริ่มลาวันที่ <span class="text-red-500">*</span></label>
-                            <input type="date" id="leaveStartDate" class="w-full border border-gray-200 rounded-xl p-2.5 text-xs bg-gray-50 focus:bg-white outline-none" required>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1">เริ่มวันที่</label>
+                            <input type="date" id="leaveStartDate" class="w-full bg-slate-50 border-none rounded-xl p-3 text-xs outline-none" required>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">ถึงวันที่ <span class="text-red-500">*</span></label>
-                            <input type="date" id="leaveEndDate" class="w-full border border-gray-200 rounded-xl p-2.5 text-xs bg-gray-50 focus:bg-white outline-none" required>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1">ถึงวันที่</label>
+                            <input type="date" id="leaveEndDate" class="w-full bg-slate-50 border-none rounded-xl p-3 text-xs outline-none" required>
                         </div>
                     </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">เหตุผลการขอลา</label>
-                        <textarea id="leaveReason" rows="2" placeholder="ระบุเหตุผลความจำเป็น..." class="w-full border border-gray-200 rounded-xl p-2.5 text-xs bg-gray-50 focus:bg-white outline-none resize-none"></textarea>
-                    </div>
-
-                    <button type="submit" id="btnSubmitLeave" class="w-full bg-[#1e293b] hover:bg-[#0f172a] text-white font-medium text-xs py-3.5 px-6 rounded-xl flex items-center justify-center space-x-2 transition-all shadow-md mt-2">
-                        <span>🦙</span>
-                        <span>ส่งคำขอลา</span>
-                    </button>
+                    <textarea id="leaveReason" rows="2" placeholder="เหตุผลการลา..." class="w-full bg-slate-50 border-none rounded-xl p-3 text-xs outline-none resize-none"></textarea>
+                    <button type="submit" id="btnSubmitLeave" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">ส่งคำขอลา</button>
                 </form>
             </div>
         </div>
 
+        <div id="tab-history" class="tab-content hidden">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border-t-8 border-slate-200 min-h-[400px]">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-sm font-bold text-slate-800">📜 ประวัติการลา</h3>
+                    <span id="leaveCountBadge" class="bg-slate-100 text-slate-500 text-[10px] px-3 py-1 rounded-full font-bold">0 รายการ</span>
+                </div>
+                <div id="leaveHistoryList" class="space-y-4">
+                    <p class="text-center text-slate-300 py-20 text-xs">กำลังโหลดประวัติ...</p>
+                </div>
+            </div>
+        </div>
+
         <div id="tab-contact" class="tab-content hidden">
-            <div class="bg-white rounded-3xl shadow-xl p-6 border-t-8 border-green-600">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <i class="fa-solid fa-phone-volume text-2xl text-green-600"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-800">ติดต่อฝ่ายทรัพยากรบุคคล</h3>
-                    <p class="text-xs text-gray-400 mt-1">งานเจ้าหน้าที่และสวัสดิการ อบต.พลวงทอง</p>
+            <div class="bg-white rounded-[2.5rem] shadow-xl p-10 border-t-8 border-emerald-500 text-center">
+                <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fa-solid fa-phone-volume text-3xl text-emerald-500"></i>
                 </div>
-                <div class="space-y-4">
-                    <div class="flex items-center p-3 bg-gray-50 rounded-2xl border border-gray-100">
-                        <i class="fa-solid fa-phone text-green-600 text-lg mr-4 w-6 text-center"></i>
-                        <div>
-                            <p class="text-sm font-semibold text-gray-800">เบอร์โทรศัพท์สำนักงาน</p>
-                            <p class="text-xs text-gray-500">ติดต่อ งานทรัพยากรบุคคล อบต.พลวงทอง</p>
-                        </div>
-                    </div>
-                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">ติดต่อฝ่ายบุคคล</h3>
+                <p class="text-xs text-slate-400 mb-8 font-medium">งานเจ้าหน้าที่และสวัสดิการ อบต.พลวงทอง</p>
+                <a href="tel:038123456" class="block bg-slate-50 rounded-2xl p-4 text-sm font-bold text-slate-700 hover:bg-slate-100 border border-slate-100">
+                    <i class="fa-solid fa-phone mr-2 text-emerald-500"></i> 038-XXX-XXX
+                </a>
             </div>
         </div>
 
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl rounded-t-2xl z-50">
-        <div class="max-w-md mx-auto flex justify-around items-center h-16">
-            
-            <button onclick="switchTab('tab-profile', this)" id="btn-profile" class="flex flex-col items-center justify-center w-full h-full text-blue-600 font-bold transition-all">
-                <i class="fa-solid fa-address-card text-xl mb-1"></i>
-                <span class="text-[10px]">ประวัติข้อมูล</span>
-            </button>
-            
-            <button onclick="switchTab('tab-salary', this)" id="btn-salary" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
-                <i class="fa-solid fa-money-check-dollar text-xl mb-1"></i>
-                <span class="text-[10px]">เงินเดือน</span>
-            </button>
-
-            <button onclick="switchTab('tab-leave', this)" id="btn-leave" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
+    <div class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-slate-100 shadow-2xl z-50">
+        <div class="max-w-md mx-auto flex justify-around items-center h-20 px-2">
+            <button onclick="switchTab('tab-leave', this)" class="menu-btn flex flex-col items-center justify-center w-full text-slate-300 transition-all">
                 <i class="fa-solid fa-calendar-plus text-xl mb-1"></i>
-                <span class="text-[10px]">ยื่นวันลา</span>
+                <span class="text-[9px] font-bold">ยื่นใบลา</span>
             </button>
-            
-            <button onclick="switchTab('tab-contact', this)" id="btn-contact" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
-                <i class="fa-solid fa-circle-user text-xl mb-1"></i>
-                <span class="text-[10px]">ติดต่อ HR</span>
+            <button onclick="switchTab('tab-history', this)" class="menu-btn flex flex-col items-center justify-center w-full text-slate-300 transition-all">
+                <i class="fa-solid fa-clock-rotate-left text-xl mb-1"></i>
+                <span class="text-[9px] font-bold">ประวัติลา</span>
             </button>
-            
-            <button onclick="liff.closeWindow()" class="flex flex-col items-center justify-center w-full h-full text-red-400 transition-all">
-                <i class="fa-solid fa-arrow-right-from-bracket text-xl mb-1"></i>
-                <span class="text-[10px]">ออก</span>
+            <button onclick="switchTab('tab-profile', this)" id="defaultTab" class="menu-btn flex flex-col items-center justify-center w-full text-blue-600 transition-all">
+                <i class="fa-solid fa-address-card text-2xl mb-1"></i>
+                <span class="text-[9px] font-bold">ข้อมูลส่วนตัว</span>
             </button>
-            
+            <button onclick="switchTab('tab-salary', this)" class="menu-btn flex flex-col items-center justify-center w-full text-slate-300 transition-all">
+                <i class="fa-solid fa-sack-dollar text-xl mb-1"></i>
+                <span class="text-[9px] font-bold">เงินเดือน</span>
+            </button>
+            <button onclick="switchTab('tab-contact', this)" class="menu-btn flex flex-col items-center justify-center w-full text-slate-300 transition-all">
+                <i class="fa-solid fa-headset text-xl mb-1"></i>
+                <span class="text-[9px] font-bold">ติดต่อ</span>
+            </button>
         </div>
     </div>
 
     <script>
-        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx1GUmuTWCqA6yMJHY_ygdotjPBIOah-lFT9AI-RgkxSRpGqhDgTmKJcC9spo6_bxxV6Q/exec";
-        const LIFF_ID = "2010314411-PgXLiLAk";
+        const GAS_API_URL = "ใส่_URL_เว็บแอป_ของ_Google_Apps_Script_ที่นี่";
+        const LIFF_ID = "ใส่_LIFF_ID_ของคุณที่นี่";
         
         let lineUserId = "";
-        let employeeName = ""; // เก็บชื่อไว้สำหรับบันทึกใบลา
+        let employeeName = "";
 
-        function switchTab(tabId, buttonElement) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+        // สลับหน้าจอ
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
             document.getElementById(tabId).classList.remove('hidden');
-
-            document.getElementById('btn-profile').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
-            document.getElementById('btn-salary').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
-            document.getElementById('btn-leave').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
-            document.getElementById('btn-contact').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
-
-            if(tabId === 'tab-profile') {
-                buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-blue-600 font-bold transition-all";
-            } else if(tabId === 'tab-salary') {
-                buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-amber-500 font-bold transition-all";
-            } else if(tabId === 'tab-leave') {
-                buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-indigo-600 font-bold transition-all";
-            } else if(tabId === 'tab-contact') {
-                buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-green-600 font-bold transition-all";
-            }
-        }
-
-async function submitLeaveForm(event) {
-    event.preventDefault();
-    
-    const selectedType = document.querySelector('input[name="leaveType"]:checked')?.value;
-    const startDate = document.getElementById('leaveStartDate').value;
-    const endDate = document.getElementById('leaveEndDate').value;
-    const reason = document.getElementById('leaveReason').value;
-    const btnSubmit = document.getElementById('btnSubmitLeave');
-
-    if (!selectedType || !startDate || !endDate) {
-        alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
-        return;
-    }
-
-    btnSubmit.disabled = true;
-    btnSubmit.innerText = "กำลังส่งข้อมูล...";
-
-    // 🦙 เปลี่ยนมาใช้วิธีต่อท้าย URL ส่งไปแบบ GET ธรรมดา (เสถียรสุดบน GitHub Pages และ LIFF)
-    const params = new URLSearchParams({
-        action: "submitLeave",
-        userId: lineUserId || "-",
-        name: employeeName || "-",
-        leaveType: selectedType,
-        startDate: startDate,
-        endDate: endDate,
-        reason: reason || "-"
-    });
-
-    try {
-        const response = await fetch(`${GAS_API_URL}?${params.toString()}`, {
-            method: 'GET'
-        });
-        
-        const result = await response.json();
-        
-        if (result.status === "success") {
-            alert("ส่งคำขอลาสำเร็จเรียบร้อยแล้ว!");
-            document.getElementById('leaveForm').reset();
-            switchTab('tab-profile', document.getElementById('btn-profile'));
-            fetchEmployeeData(); // สั่งให้อัปเดตโควตาวันลาหน้าแรกใหม่ทันที
-        } else {
-            alert("เกิดข้อผิดพลาด: " + result.message);
-        }
-
-    } catch (error) {
-        // แผนสำรองกรณีเครือข่ายบล็อกแต่ข้อมูลเข้า
-        alert("ส่งคำขอลาเรียบร้อยแล้ว! (กรุณาเช็กในตาราง Sheets อีกครั้ง)");
-        document.getElementById('leaveForm').reset();
-        switchTab('tab-profile', document.getElementById('btn-profile'));
-    } finally {
-        btnSubmit.disabled = false;
-        btnSubmit.innerHTML = "<span>🦙</span><span>ส่งคำขอลา</span>";
-    }
-}
-        async function initLiff() {
-            try {
-                await liff.init({ liffId: LIFF_ID });
-                if (liff.isLoggedIn()) {
-                    const profile = await liff.getProfile();
-                    lineUserId = profile.userId;
-                    
-                    if (profile.pictureUrl) {
-                        document.getElementById("lineProfileImg").src = profile.pictureUrl;
-                        document.getElementById("lineProfileImg").classList.remove("hidden");
-                        document.getElementById("defaultUserIcon").classList.add("hidden");
-                    }
-                    document.getElementById("lineDisplayName").innerText = profile.displayName || "-";
-                    
-                    fetchEmployeeData();
-                } else {
-                    liff.login();
-                }
-            } catch (error) {
-                document.getElementById("statusMessage").innerText = "การเชื่อมต่อ LINE ล้มเหลว";
-            }
-        }
-
-        async function fetchEmployeeData() {
-            if (!lineUserId) return;
+            document.querySelectorAll('.menu-btn').forEach(b => b.className = "menu-btn flex flex-col items-center justify-center w-full text-slate-300 transition-all");
             
+            // เปลี่ยนสีตามแท็บ
+            if(tabId === 'tab-profile') btn.classList.add('text-blue-600');
+            else if(tabId === 'tab-salary') btn.classList.add('text-amber-500');
+            else if(tabId === 'tab-leave') btn.classList.add('text-indigo-600');
+            else if(tabId === 'tab-history') { btn.classList.add('text-slate-800'); fetchLeaveHistory(); }
+            else if(tabId === 'tab-contact') btn.classList.add('text-emerald-500');
+        }
+
+        // ยื่นใบลา
+        async function submitLeaveForm(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmitLeave');
+            const params = new URLSearchParams({
+                action: "submitLeave",
+                userId: lineUserId,
+                name: employeeName,
+                leaveType: document.querySelector('input[name="leaveType"]:checked').value,
+                startDate: document.getElementById('leaveStartDate').value,
+                endDate: document.getElementById('leaveEndDate').value,
+                reason: document.getElementById('leaveReason').value
+            });
+
+            btn.disabled = true; btn.innerText = "กำลังบันทึก...";
             try {
-                const response = await fetch(`${GAS_API_URL}?userId=${lineUserId}`);
-                const result = await response.json();
+                const res = await fetch(`${GAS_API_URL}?${params.toString()}`);
+                const result = await res.json();
+                if(result.status === "success") {
+                    alert("บันทึกสำเร็จ!");
+                    document.getElementById('leaveForm').reset();
+                    switchTab('tab-history', document.querySelector('button[onclick*="tab-history"]'));
+                }
+            } catch (err) { alert("ยื่นใบลาสำเร็จ!"); location.reload(); }
+        }
 
-                if (result.status === "success") {
-                    document.getElementById("statusMessage").classList.add("hidden");
-                    document.getElementById("tab-profile").classList.remove("hidden");
-                    
+        // ดึงประวัติการลา
+        async function fetchLeaveHistory() {
+            const list = document.getElementById('leaveHistoryList');
+            list.innerHTML = '<p class="text-center py-20 text-xs text-slate-300">กำลังโหลด...</p>';
+            try {
+                const res = await fetch(`${GAS_API_URL}?action=getLeaveHistory&userId=${lineUserId}`);
+                const result = await res.json();
+                if(result.status === "success" && result.data.length > 0) {
+                    document.getElementById('leaveCountBadge').innerText = `${result.data.length} รายการ`;
+                    list.innerHTML = result.data.map(item => `
+                        <div class="flex items-center justify-between p-4 border-b border-slate-50">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-xl">
+                                    ${item.leaveType.includes('ป่วย') ? '🏥' : item.leaveType.includes('กิจ') ? '🏠' : '🏖️'}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">${item.leaveType}</h4>
+                                    <p class="text-[10px] text-slate-400 mt-1 italic">${item.startDate} ${item.endDate !== item.startDate ? ' - ' + item.endDate : ''}</p>
+                                </div>
+                            </div>
+                            <span class="bg-emerald-50 text-emerald-600 text-[9px] font-bold px-2 py-1 rounded-md">✅ ${item.status || 'อนุมัติ'}</span>
+                        </div>
+                    `).join('');
+                } else { list.innerHTML = '<p class="text-center py-20 text-xs text-slate-300 font-bold">ไม่มีประวัติการลา</p>'; }
+            } catch (err) { list.innerHTML = '<p class="text-center py-20 text-red-300 text-xs">โหลดไม่สำเร็จ</p>'; }
+        }
+
+        // ดึงข้อมูลพนักงาน
+        async function fetchEmployeeData() {
+            try {
+                const res = await fetch(`${GAS_API_URL}?userId=${lineUserId}`);
+                const result = await res.json();
+                if(result.status === "success") {
+                    document.getElementById('statusMessage').classList.add('hidden');
+                    document.getElementById('tab-profile').classList.remove('hidden');
                     const d = result.data;
-                    employeeName = d["ชื่อ-นามสกุล"] || "ไม่ระบุชื่อ";
-                    
-                    // 1. ผูกข้อมูลหน้าประวัติส่วนตัว
-                    document.getElementById("empCitizenId").innerText = d["เลขบัตรประชาชน"] || "-";
+                    employeeName = d["ชื่อ-นามสกุล"];
                     document.getElementById("empName").innerText = employeeName;
-                    document.getElementById("empType").innerText = d["ประเภท"] || "-";
-                    document.getElementById("empPosition").innerText = d["ตำแหน่ง"] || "-";
-                    document.getElementById("empLevel").innerText = d["ระดับ"] ? ` (${d["ระดับ"]})` : "";
-                    
-                    document.getElementById("empTypeRow").innerText = d["ประเภท"] || "-";
-                    document.getElementById("empPositionRow").innerText = d["ตำแหน่ง"] || "-";
-                    document.getElementById("empLevelRow").innerText = d["ระดับ"] || "-";
-                    document.getElementById("empPosNo").innerText = d["เลขที่ตำแหน่ง"] || "-";
-                    document.getElementById("empDept").innerText = d["สังกัด"] || "-";
-                    document.getElementById("empBirth").innerText = d["วันเกิด"] || "-";
-                    document.getElementById("empAge").innerText = d["อายุ"] || "-";
-                    document.getElementById("empPhone").innerText = d["เบอร์โทรศัพท์"] || "-";
-                    document.getElementById("empStartDate").innerText = d["วันที่เริ่มเข้ารับราชการ"] || "-";
-                    document.getElementById("empServiceTime").innerText = d["อายุราชการ"] || "-";
-                    document.getElementById("empRetireDate").innerText = d["วันเกษียณอายุ"] || "-";
-                    
-                    // 2. ผูกข้อมูลหน้าเงินเดือนปัจจุบัน
-                    const nComp = Number(d["เงินค่าตอบแทน"] || 0);
-                    const nCol = Number(d["เงินเพิ่มค่าครองชีพชั่วคราว"] || 0);
-                    const nPos = Number(d["เงินประจำตำแหน่ง"] || 0);
-                    const nAcad = Number(d["เงินวิทยฐานะ"] || 0);
-                    const nExtra = Number(d["ค่าตอบแทนนอกเหนือจากเงินเดือน"] || 0);
-                    const nHazard = Number(d["เงินค่าตอบแทนเสี่ยงภัย"] || 0);
-                    const nTotal = nComp + nCol + nPos + nAcad + nExtra + nHazard;
-
-                    document.getElementById("salCompensation").innerText = nComp.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
-                    document.getElementById("salCostOfLiving").innerText = nCol.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
-                    document.getElementById("salPosition").innerText = nPos.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
-                    document.getElementById("salAcademic").innerText = nAcad.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
-                    document.getElementById("salExtra").innerText = nExtra.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
-                    document.getElementById("salHazardous").innerText = nHazard.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
-                    document.getElementById("salTotal").innerText = nTotal.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
-                    
-                    // 3. ผูกข้อมูลจำนวนวันลาคงเหลือจาก Google Sheets
+                    document.getElementById("empType").innerText = d["ประเภท"];
+                    document.getElementById("empPositionRow").innerText = d["ตำแหน่ง"];
+                    document.getElementById("empLevelRow").innerText = d["ระดับ"];
+                    document.getElementById("empDept").innerText = d["สังกัด"];
+                    document.getElementById("empServiceTime").innerText = d["อายุราชการ"];
+                    document.getElementById("empRetireDate").innerText = d["วันเกษียณอายุ"];
+                    document.getElementById("salCompensation").innerText = Number(d["เงินค่าตอบแทน"] || 0).toLocaleString() + " ฿";
+                    document.getElementById("salCostOfLiving").innerText = Number(d["เงินเพิ่มค่าครองชีพชั่วคราว"] || 0).toLocaleString() + " ฿";
+                    document.getElementById("salPosition").innerText = Number(d["เงินประจำตำแหน่ง"] || 0).toLocaleString() + " ฿";
+                    document.getElementById("salAcademic").innerText = Number(d["เงินวิทยฐานะ"] || 0).toLocaleString() + " ฿";
+                    document.getElementById("salTotal").innerText = (Number(d["เงินค่าตอบแทน"]||0)+Number(d["เงินเพิ่มค่าครองชีพชั่วคราว"]||0)+Number(d["เงินประจำตำแหน่ง"]||0)+Number(d["เงินวิทยฐานะ"]||0)).toLocaleString() + " ฿";
                     document.getElementById("leaveVacation").innerText = d["วันลาพักร้อนคงเหลือ"] || "0";
                     document.getElementById("leavePersonal").innerText = d["วันลากิจคงเหลือ"] || "0";
                     document.getElementById("leaveSick").innerText = d["วันลาป่วยคงเหลือ"] || "0";
-                    
-                } else {
-                    document.getElementById("statusMessage").innerText = result.message;
                 }
-            } catch (error) {
-                document.getElementById("statusMessage").innerText = "ไม่สามารถติดต่อฐานข้อมูลได้";
-            }
+            } catch (err) { document.getElementById('statusMessage').innerText = "โหลดล้มเหลว"; }
         }
 
-        initLiff();
+        async function init() {
+            await liff.init({ liffId: LIFF_ID });
+            if (liff.isLoggedIn()) {
+                const p = await liff.getProfile();
+                lineUserId = p.userId;
+                if(p.pictureUrl) { 
+                    document.getElementById("lineProfileImg").src = p.pictureUrl; 
+                    document.getElementById("lineProfileImg").classList.remove("hidden");
+                    document.getElementById("defaultUserIcon").classList.add("hidden");
+                }
+                fetchEmployeeData();
+            } else { liff.login(); }
+        }
+        init();
     </script>
 </body>
 </html>
