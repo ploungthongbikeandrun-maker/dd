@@ -294,7 +294,8 @@
             }
         }
 
-     async function submitLeaveForm(event) {
+// 🦙 ฟังก์ชันส่งข้อมูลการลาแบบ FormData (เสถียรที่สุดสำหรับ Google Apps Script)
+async function submitLeaveForm(event) {
     event.preventDefault();
     
     const selectedType = document.querySelector('input[name="leaveType"]:checked')?.value;
@@ -311,25 +312,22 @@
     btnSubmit.disabled = true;
     btnSubmit.innerText = "กำลังส่งข้อมูล...";
 
-    // แพ็กข้อมูลในรูปแบบ Object เพื่อแปลงเป็น JSON
-    const payload = {
-        action: "submitLeave",
-        userId: lineUserId || "-",
-        name: employeeName || "-",
-        leaveType: selectedType,
-        startDate: startDate,
-        endDate: endDate,
-        reason: reason || "-"
-    };
+    // ใช้ FormData ในการแพ็กข้อมูล ส่งเป็นฟอร์มแท้ ๆ เข้าหลังบ้าน
+    const formData = new FormData();
+    formData.append("action", "submitLeave");
+    formData.append("userId", lineUserId || "-");
+    formData.append("name", employeeName || "-");
+    formData.append("leaveType", selectedType);
+    formData.append("startDate", startDate);
+    formData.append("endDate", endDate);
+    formData.append("reason", reason || "-");
 
     try {
+        // ส่งตรงเข้าจุดเชื่อมโยงสคริปต์
         const response = await fetch(GAS_API_URL, {
             method: 'POST',
-            mode: 'cors', // บังคับโหมด CORS เพื่อให้คุยกันรู้เรื่อง
-            headers: {
-                'Content-Type': 'text/plain' // ใช้ text/plain เพื่อเลี่ยงการติด Preflight CORS ตรวจสอบสิทธิ์ซับซ้อน
-            },
-            body: JSON.stringify(payload)
+            body: formData
+            // ⚠️ สำคัญมาก: ห้ามใส่ Headers Content-Type เด็ดขาด เบราว์เซอร์จะจัดการ Boundary ให้เองอัตโนมัติเมื่อใช้ FormData
         });
         
         const result = await response.json();
@@ -343,8 +341,8 @@
         }
 
     } catch (error) {
-        // ดักกรณีส่งผ่านเข้าชีตสำเร็จแต่ฝั่งเบราว์เซอร์ติดบล็อกการตอบกลับ
-        alert("ส่งคำขอลาเรียบร้อยแล้ว! (กรุณาเช็กใน Google Sheets ของคุณอีกครั้ง)");
+        // จัดการเคสที่ข้อมูลเข้าชีตแล้ว แต่สิทธิ์การแชร์บล็อกสัญญาณขากลับ
+        alert("ส่งคำขอลาเรียบร้อยแล้ว! (กรุณาเช็กในหน้าแผ่นงาน Google Sheets อีกครั้ง)");
         document.getElementById('leaveForm').reset();
         switchTab('tab-profile', document.getElementById('btn-profile'));
     } finally {
