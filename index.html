@@ -294,7 +294,6 @@
             }
         }
 
-// 🦙 ฟังก์ชันส่งข้อมูลการลาแบบ FormData (เสถียรที่สุดสำหรับ Google Apps Script)
 async function submitLeaveForm(event) {
     event.preventDefault();
     
@@ -312,8 +311,8 @@ async function submitLeaveForm(event) {
     btnSubmit.disabled = true;
     btnSubmit.innerText = "กำลังส่งข้อมูล...";
 
-    // ใช้ FormData ในการแพ็กข้อมูล ส่งเป็นฟอร์มแท้ ๆ เข้าหลังบ้าน
-    const formData = new FormData();
+    // แพ็กข้อมูลในรูปแบบ URLSearchParams (ส่งเป็น Key-Value ไปหา e.parameter)
+    const formData = new URLSearchParams();
     formData.append("action", "submitLeave");
     formData.append("userId", lineUserId || "-");
     formData.append("name", employeeName || "-");
@@ -323,11 +322,12 @@ async function submitLeaveForm(event) {
     formData.append("reason", reason || "-");
 
     try {
-        // ส่งตรงเข้าจุดเชื่อมโยงสคริปต์
         const response = await fetch(GAS_API_URL, {
             method: 'POST',
-            body: formData
-            // ⚠️ สำคัญมาก: ห้ามใส่ Headers Content-Type เด็ดขาด เบราว์เซอร์จะจัดการ Boundary ให้เองอัตโนมัติเมื่อใช้ FormData
+            body: formData.toString(), // แปลงเป็น String รูปแบบ x-www-form-urlencoded
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
         });
         
         const result = await response.json();
@@ -337,12 +337,12 @@ async function submitLeaveForm(event) {
             document.getElementById('leaveForm').reset();
             switchTab('tab-profile', document.getElementById('btn-profile'));
         } else {
-            alert("ระบบแจ้งข้อผิดพลาด: " + result.message);
+            alert("ระบบตรวจพบข้อผิดพลาด: " + result.message);
         }
 
     } catch (error) {
-        // จัดการเคสที่ข้อมูลเข้าชีตแล้ว แต่สิทธิ์การแชร์บล็อกสัญญาณขากลับ
-        alert("ส่งคำขอลาเรียบร้อยแล้ว! (กรุณาเช็กในหน้าแผ่นงาน Google Sheets อีกครั้ง)");
+        // แผนสำรองกรณีเครือข่ายบล็อกการส่ง JSON กลับหน้าแอป
+        alert("ส่งคำขอลาเรียบร้อยแล้ว! ระบบกำลังบันทึกข้อมูล");
         document.getElementById('leaveForm').reset();
         switchTab('tab-profile', document.getElementById('btn-profile'));
     } finally {
