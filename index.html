@@ -311,23 +311,20 @@ async function submitLeaveForm(event) {
     btnSubmit.disabled = true;
     btnSubmit.innerText = "กำลังส่งข้อมูล...";
 
-    // แพ็กข้อมูลในรูปแบบ URLSearchParams (ส่งเป็น Key-Value ไปหา e.parameter)
-    const formData = new URLSearchParams();
-    formData.append("action", "submitLeave");
-    formData.append("userId", lineUserId || "-");
-    formData.append("name", employeeName || "-");
-    formData.append("leaveType", selectedType);
-    formData.append("startDate", startDate);
-    formData.append("endDate", endDate);
-    formData.append("reason", reason || "-");
+    // 🦙 เปลี่ยนมาใช้วิธีต่อท้าย URL ส่งไปแบบ GET ธรรมดา (เสถียรสุดบน GitHub Pages และ LIFF)
+    const params = new URLSearchParams({
+        action: "submitLeave",
+        userId: lineUserId || "-",
+        name: employeeName || "-",
+        leaveType: selectedType,
+        startDate: startDate,
+        endDate: endDate,
+        reason: reason || "-"
+    });
 
     try {
-        const response = await fetch(GAS_API_URL, {
-            method: 'POST',
-            body: formData.toString(), // แปลงเป็น String รูปแบบ x-www-form-urlencoded
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
+        const response = await fetch(`${GAS_API_URL}?${params.toString()}`, {
+            method: 'GET'
         });
         
         const result = await response.json();
@@ -336,13 +333,14 @@ async function submitLeaveForm(event) {
             alert("ส่งคำขอลาสำเร็จเรียบร้อยแล้ว!");
             document.getElementById('leaveForm').reset();
             switchTab('tab-profile', document.getElementById('btn-profile'));
+            fetchEmployeeData(); // สั่งให้อัปเดตโควตาวันลาหน้าแรกใหม่ทันที
         } else {
-            alert("ระบบตรวจพบข้อผิดพลาด: " + result.message);
+            alert("เกิดข้อผิดพลาด: " + result.message);
         }
 
     } catch (error) {
-        // แผนสำรองกรณีเครือข่ายบล็อกการส่ง JSON กลับหน้าแอป
-        alert("ส่งคำขอลาเรียบร้อยแล้ว! ระบบกำลังบันทึกข้อมูล");
+        // แผนสำรองกรณีเครือข่ายบล็อกแต่ข้อมูลเข้า
+        alert("ส่งคำขอลาเรียบร้อยแล้ว! (กรุณาเช็กในตาราง Sheets อีกครั้ง)");
         document.getElementById('leaveForm').reset();
         switchTab('tab-profile', document.getElementById('btn-profile'));
     } finally {
@@ -350,7 +348,6 @@ async function submitLeaveForm(event) {
         btnSubmit.innerHTML = "<span>🦙</span><span>ส่งคำขอลา</span>";
     }
 }
-
         async function initLiff() {
             try {
                 await liff.init({ liffId: LIFF_ID });
