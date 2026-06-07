@@ -139,44 +139,77 @@
         </div>
 
         <div id="tab-leave" class="tab-content hidden">
-            <div class="bg-white rounded-3xl shadow-xl p-6 border-t-8 border-indigo-600 mb-4">
-                <div class="flex items-center space-x-2 mb-4">
+            <div class="bg-white rounded-3xl shadow-xl p-5 border-t-8 border-indigo-600 mb-4">
+                <div class="flex items-center space-x-2 mb-2">
                     <span class="text-xl">📋</span>
-                    <h3 class="text-lg font-bold text-gray-800">ยื่นใบลา</h3>
+                    <h3 class="text-lg font-bold text-gray-800">โควตาวันลาคงเหลือ</h3>
                 </div>
-                <p class="text-xs text-gray-500 mb-6">กดปุ่มด้านล่างเพื่อกรอกแบบฟอร์มยื่นวันลา ระบบจะแจ้งหัวหน้าทันทีหลังส่งคำขอ</p>
                 
-                <div class="grid grid-cols-3 gap-3 mb-6">
-                    <div class="bg-indigo-50/50 rounded-2xl p-4 text-center border border-indigo-100 flex flex-col justify-between">
-                        <span class="text-2xl mb-1">🏖️</span>
-                        <span id="leaveVacation" class="text-2xl font-black text-indigo-600 my-1">0</span>
-                        <span class="text-xs font-medium text-indigo-500">พักร้อน</span>
-                        <div class="w-full bg-gray-200 h-1.5 rounded-full mt-2 overflow-hidden">
-                            <div class="bg-indigo-500 h-full w-2/3 rounded-full"></div>
-                        </div>
+                <div class="grid grid-cols-3 gap-3 mb-2">
+                    <div class="bg-indigo-50/50 rounded-2xl p-3 text-center border border-indigo-100">
+                        <span class="text-xl">🏖️</span>
+                        <div id="leaveVacation" class="text-xl font-black text-indigo-600 my-0.5">0</div>
+                        <span class="text-[10px] font-medium text-indigo-500">ลาพักร้อน</span>
                     </div>
-                    <div class="bg-teal-50/50 rounded-2xl p-4 text-center border border-teal-100 flex flex-col justify-between">
-                        <span class="text-2xl mb-1">🏠</span>
-                        <span id="leavePersonal" class="text-2xl font-black text-teal-600 my-1">0</span>
-                        <span class="text-xs font-medium text-teal-500">ลากิจ</span>
-                        <div class="w-full bg-gray-200 h-1.5 rounded-full mt-2 overflow-hidden">
-                            <div class="bg-teal-500 h-full w-1/2 rounded-full"></div>
-                        </div>
+                    <div class="bg-teal-50/50 rounded-2xl p-3 text-center border border-teal-100">
+                        <span class="text-xl">🏠</span>
+                        <div id="leavePersonal" class="text-xl font-black text-teal-600 my-0.5">0</div>
+                        <span class="text-[10px] font-medium text-teal-500">ลากิจส่วนตัว</span>
                     </div>
-                    <div class="bg-emerald-50/50 rounded-2xl p-4 text-center border border-emerald-100 flex flex-col justify-between">
-                        <span class="text-2xl mb-1">🏥</span>
-                        <span id="leaveSick" class="text-2xl font-black text-emerald-600 my-1">0</span>
-                        <span class="text-xs font-medium text-emerald-500">ลาป่วย</span>
-                        <div class="w-full bg-gray-200 h-1.5 rounded-full mt-2 overflow-hidden">
-                            <div class="bg-emerald-500 h-full w-4/5 rounded-full"></div>
-                        </div>
+                    <div class="bg-emerald-50/50 rounded-2xl p-3 text-center border border-emerald-100">
+                        <span class="text-xl">🏥</span>
+                        <div id="leaveSick" class="text-xl font-black text-emerald-600 my-0.5">0</div>
+                        <span class="text-[10px] font-medium text-emerald-500">ลาป่วย</span>
                     </div>
                 </div>
+            </div>
 
-                <a href="https://forms.google.com" target="_blank" class="w-full bg-[#0f172a] hover:bg-[#1e293b] text-white font-medium text-sm py-4 px-6 rounded-2xl flex items-center justify-center space-x-2 transition-all shadow-lg shadow-gray-200">
-                    <span>🦙</span>
-                    <span>กรอกใบลาเดี๋ยวนี้</span>
-                </a>
+            <div class="bg-white rounded-3xl shadow-xl p-5 border-t-8 border-slate-700">
+                <h3 class="text-sm font-bold text-gray-800 mb-4"><i class="fa-solid fa-pen-to-square text-indigo-500 mr-2"></i>รายละเอียดการขอลา</h3>
+                
+                <form id="leaveForm" onsubmit="submitLeaveForm(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-2">ประเภทการลา <span class="text-red-500">*</span></label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <label class="border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-all relative">
+                                <input type="radio" name="leaveType" value="ลาพักร้อน" class="absolute top-2 right-2 accent-indigo-600" required>
+                                <span class="text-lg">🏖️</span>
+                                <span class="text-xs mt-1 text-gray-700">ลาพักร้อน</span>
+                            </label>
+                            <label class="border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-all relative">
+                                <input type="radio" name="leaveType" value="ลากิจส่วนตัว" class="absolute top-2 right-2 accent-indigo-600">
+                                <span class="text-lg">🏠</span>
+                                <span class="text-xs mt-1 text-gray-700">ลากิจส่วนตัว</span>
+                            </label>
+                            <label class="border border-gray-200 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-all relative">
+                                <input type="radio" name="leaveType" value="ลาป่วย" class="absolute top-2 right-2 accent-indigo-600">
+                                <span class="text-lg">🏥</span>
+                                <span class="text-xs mt-1 text-gray-700">ลาป่วย</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">เริ่มลาวันที่ <span class="text-red-500">*</span></label>
+                            <input type="date" id="leaveStartDate" class="w-full border border-gray-200 rounded-xl p-2.5 text-xs bg-gray-50 focus:bg-white outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">ถึงวันที่ <span class="text-red-500">*</span></label>
+                            <input type="date" id="leaveEndDate" class="w-full border border-gray-200 rounded-xl p-2.5 text-xs bg-gray-50 focus:bg-white outline-none" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">เหตุผลการขอลา</label>
+                        <textarea id="leaveReason" rows="2" placeholder="ระบุเหตุผลความจำเป็น..." class="w-full border border-gray-200 rounded-xl p-2.5 text-xs bg-gray-50 focus:bg-white outline-none resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" id="btnSubmitLeave" class="w-full bg-[#1e293b] hover:bg-[#0f172a] text-white font-medium text-xs py-3.5 px-6 rounded-xl flex items-center justify-center space-x-2 transition-all shadow-md mt-2">
+                        <span>🦙</span>
+                        <span>ส่งคำขอลา</span>
+                    </button>
+                </form>
             </div>
         </div>
 
@@ -235,10 +268,11 @@
     </div>
 
     <script>
-        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx1GUmuTWCqA6yMJHY_ygdotjPBIOah-lFT9AI-RgkxSRpGqhDgTmKJcC9spo6_bxxV6Q/exec";
-        const LIFF_ID = "2010314411-PgXLiLAk";
+        const GAS_API_URL = "ใส่_URL_เว็บแอป_ของ_Google_Apps_Script_ที่นี่";
+        const LIFF_ID = "ใส่_LIFF_ID_ของคุณที่นี่";
         
         let lineUserId = "";
+        let employeeName = ""; // เก็บชื่อไว้สำหรับบันทึกใบลา
 
         function switchTab(tabId, buttonElement) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
@@ -257,6 +291,53 @@
                 buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-indigo-600 font-bold transition-all";
             } else if(tabId === 'tab-contact') {
                 buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-green-600 font-bold transition-all";
+            }
+        }
+
+        // 🦙 ฟังก์ชันส่งข้อมูลการลาไปยัง Google Apps Script
+        async function submitLeaveForm(event) {
+            event.preventDefault();
+            
+            const selectedType = document.querySelector('input[name="leaveType"]:checked')?.value;
+            const startDate = document.getElementById('leaveStartDate').value;
+            const endDate = document.getElementById('leaveEndDate').value;
+            const reason = document.getElementById('leaveReason').value;
+            const btnSubmit = document.getElementById('btnSubmitLeave');
+
+            if (!selectedType || !startDate || !endDate) {
+                alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "กำลังส่งข้อมูล...";
+
+            try {
+                // ส่งข้อมูลแฝงไปกับ POST Request
+                const response = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // เพื่อเลี่ยงปัญหาเรื่อง CORS บล็อกตอนบันทึกข้อมูล
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: "submitLeave",
+                        userId: lineUserId,
+                        name: employeeName,
+                        leaveType: selectedType,
+                        startDate: startDate,
+                        endDate: endDate,
+                        reason: reason
+                    })
+                });
+
+                alert("ส่งคำขอลาสำเร็จเรียบร้อยแล้ว!");
+                document.getElementById('leaveForm').reset();
+                switchTab('tab-profile', document.getElementById('btn-profile'));
+
+            } catch (error) {
+                alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง");
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = "<span>🦙</span><span>ส่งคำขอลา</span>";
             }
         }
 
@@ -295,10 +376,11 @@
                     document.getElementById("tab-profile").classList.remove("hidden");
                     
                     const d = result.data;
+                    employeeName = d["ชื่อ-นามสกุล"] || "ไม่ระบุชื่อ";
                     
                     // 1. ผูกข้อมูลหน้าประวัติส่วนตัว
                     document.getElementById("empCitizenId").innerText = d["เลขบัตรประชาชน"] || "-";
-                    document.getElementById("empName").innerText = d["ชื่อ-นามสกุล"] || "-";
+                    document.getElementById("empName").innerText = employeeName;
                     document.getElementById("empType").innerText = d["ประเภท"] || "-";
                     document.getElementById("empPosition").innerText = d["ตำแหน่ง"] || "-";
                     document.getElementById("empLevel").innerText = d["ระดับ"] ? ` (${d["ระดับ"]})` : "";
@@ -332,7 +414,7 @@
                     document.getElementById("salHazardous").innerText = nHazard.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
                     document.getElementById("salTotal").innerText = nTotal.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
                     
-                    // 3. ผูกข้อมูลจำนวนวันลาคงเหลือจาก Google Sheets (NEW)
+                    // 3. ผูกข้อมูลจำนวนวันลาคงเหลือจาก Google Sheets
                     document.getElementById("leaveVacation").innerText = d["วันลาพักร้อนคงเหลือ"] || "0";
                     document.getElementById("leavePersonal").innerText = d["วันลากิจคงเหลือ"] || "0";
                     document.getElementById("leaveSick").innerText = d["วันลาป่วยคงเหลือ"] || "0";
