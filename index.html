@@ -294,7 +294,7 @@
             }
         }
 
-       async function submitLeaveForm(event) {
+     async function submitLeaveForm(event) {
     event.preventDefault();
     
     const selectedType = document.querySelector('input[name="leaveType"]:checked')?.value;
@@ -311,23 +311,25 @@
     btnSubmit.disabled = true;
     btnSubmit.innerText = "กำลังส่งข้อมูล...";
 
-    // ใช้ URLSearchParams แทน JSON เพื่อให้ GAS รับค่าได้ง่ายและไม่ติด CORS
-    const formData = new URLSearchParams();
-    formData.append("action", "submitLeave");
-    formData.append("userId", lineUserId);
-    formData.append("name", employeeName);
-    formData.append("leaveType", selectedType);
-    formData.append("startDate", startDate);
-    formData.append("endDate", endDate);
-    formData.append("reason", reason);
+    // แพ็กข้อมูลในรูปแบบ Object เพื่อแปลงเป็น JSON
+    const payload = {
+        action: "submitLeave",
+        userId: lineUserId || "-",
+        name: employeeName || "-",
+        leaveType: selectedType,
+        startDate: startDate,
+        endDate: endDate,
+        reason: reason || "-"
+    };
 
     try {
         const response = await fetch(GAS_API_URL, {
             method: 'POST',
-            body: formData,
+            mode: 'cors', // บังคับโหมด CORS เพื่อให้คุยกันรู้เรื่อง
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
+                'Content-Type': 'text/plain' // ใช้ text/plain เพื่อเลี่ยงการติด Preflight CORS ตรวจสอบสิทธิ์ซับซ้อน
+            },
+            body: JSON.stringify(payload)
         });
         
         const result = await response.json();
@@ -337,12 +339,12 @@
             document.getElementById('leaveForm').reset();
             switchTab('tab-profile', document.getElementById('btn-profile'));
         } else {
-            alert("เกิดข้อผิดพลาดจากระบบ: " + result.message);
+            alert("ระบบแจ้งข้อผิดพลาด: " + result.message);
         }
 
     } catch (error) {
-        // ในบางกรณีส่งผ่านแต่ GAS ไม่ส่งตัวแปรกลับมา ให้แจ้งสำเร็จไว้ก่อนถ้าข้อมูลเข้าชีต
-        alert("ส่งคำขอลาเรียบร้อยแล้ว! (กรุณาตรวจสอบใน Google Sheets)");
+        // ดักกรณีส่งผ่านเข้าชีตสำเร็จแต่ฝั่งเบราว์เซอร์ติดบล็อกการตอบกลับ
+        alert("ส่งคำขอลาเรียบร้อยแล้ว! (กรุณาเช็กใน Google Sheets ของคุณอีกครั้ง)");
         document.getElementById('leaveForm').reset();
         switchTab('tab-profile', document.getElementById('btn-profile'));
     } finally {
