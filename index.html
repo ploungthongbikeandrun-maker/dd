@@ -17,11 +17,21 @@
         <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-6 border-t-8 border-blue-600">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-6">
-                    <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-3">
-                        <i class="fa-solid fa-id-card-clip text-3xl text-blue-600"></i>
+                    <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-3 overflow-hidden border-4 border-white shadow-md">
+                        <img id="lineProfileImg" src="" alt="Profile" class="w-full h-full object-cover hidden">
+                        <i id="defaultUserIcon" class="fa-solid fa-user-tie text-4xl text-blue-400"></i>
                     </div>
-                    <h2 class="text-xl font-bold text-gray-800 text-center">ข้อมูลประวัติบุคคล</h2>
-                    <p class="text-gray-400 text-xs mt-1">ข้อมูลส่วนบุคคลอิเล็กทรอนิกส์</p>
+                    
+                    <h2 id="empName" class="text-xl font-bold text-gray-800 text-center">กำลังโหลดข้อมูล...</h2>
+                    
+                    <p class="text-xs text-gray-400 mt-1 flex items-center">
+                        <i class="fa-brands fa-line text-green-500 mr-1 text-sm"></i> ชื่อ LINE: <span id="lineDisplayName" class="ml-1 font-medium">-</span>
+                    </p>
+                    
+                    <p class="text-blue-600 font-semibold text-sm mt-2">
+                        <span id="empPosition">-</span><span id="empLevel"></span>
+                    </p>
+                    <p id="empType" class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full mt-2 font-medium">-</p>
                 </div>
 
                 <div id="statusMessage" class="text-center text-gray-400 py-6 text-sm italic">
@@ -36,23 +46,18 @@
                     </div>
                     
                     <div class="flex justify-between border-b pb-2">
-                        <span class="text-gray-500"><i class="fa-solid fa-user mr-2 w-5"></i>ชื่อ-นามสกุล</span>
-                        <span id="empName" class="text-gray-800 font-bold text-blue-900">-</span>
-                    </div>
-                    
-                    <div class="flex justify-between border-b pb-2">
                         <span class="text-gray-500"><i class="fa-solid fa-tags mr-2 w-5"></i>ประเภท</span>
-                        <span id="empType" class="text-gray-800 font-semibold">-</span>
+                        <span id="empTypeRow" class="text-gray-800 font-semibold">-</span>
                     </div>
                     
                     <div class="flex justify-between border-b pb-2">
                         <span class="text-gray-500"><i class="fa-solid fa-user-tie mr-2 w-5"></i>ตำแหน่ง</span>
-                        <span id="empPosition" class="text-gray-800 font-semibold">-</span>
+                        <span id="empPositionRow" class="text-gray-800 font-semibold">-</span>
                     </div>
                     
                     <div class="flex justify-between border-b pb-2">
                         <span class="text-gray-500"><i class="fa-solid fa-arrow-up-trend-lines mr-2 w-5"></i>ระดับ</span>
-                        <span id="empLevel" class="text-gray-800 font-semibold">-</span>
+                        <span id="empLevelRow" class="text-gray-800 font-semibold">-</span>
                     </div>
                     
                     <div class="flex justify-between border-b pb-2">
@@ -101,10 +106,10 @@
 
     </div>
     
-    <p class="text-center text-gray-400 text-[10px] my-4">ระบบสารสนเทศบุคลากรออนไลน์ v3.5</p>
+    <p class="text-center text-gray-400 text-[10px] my-4">ระบบสารสนเทศบุคลากรออนไลน์ v4.0</p>
 
     <script>
-        // ⚠️ อย่าลืมใส่ URL เว็บแอป GAS และ LIFF ID ของคุณตรงนี้
+        // ⚠️ ใส่ URL เว็บแอป GAS และ LIFF ID ของคุณตรงนี้
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx1GUmuTWCqA6yMJHY_ygdotjPBIOah-lFT9AI-RgkxSRpGqhDgTmKJcC9spo6_bxxV6Q/exec";
         const LIFF_ID = "2010314411-PgXLiLAk";
         
@@ -116,6 +121,15 @@
                 if (liff.isLoggedIn()) {
                     const profile = await liff.getProfile();
                     lineUserId = profile.userId;
+                    
+                    // 📸 ดึงรูปโปรไฟล์ และ ชื่อจาก LINE มาแสดงผลทันที
+                    if (profile.pictureUrl) {
+                        document.getElementById("lineProfileImg").src = profile.pictureUrl;
+                        document.getElementById("lineProfileImg").classList.remove("hidden");
+                        document.getElementById("defaultUserIcon").classList.add("hidden");
+                    }
+                    document.getElementById("lineDisplayName").innerText = profile.displayName || "-";
+                    
                     fetchEmployeeData();
                 } else {
                     liff.login();
@@ -138,12 +152,17 @@
                     
                     const d = result.data;
                     
-                    // จับคู่ตัวแปรเพื่อแสดงผลให้ตรงกับหัวตารางของ Google Sheets
-                    document.getElementById("empCitizenId").innerText = d["เลขบัตรประชาชน"] || "-";
+                    // แสดงผลข้อมูลที่ดึงมาจาก Google Sheets
                     document.getElementById("empName").innerText = d["ชื่อ-นามสกุล"] || "-";
-                    document.getElementById("empType").innerText = d["ประเภท"] || "-";
                     document.getElementById("empPosition").innerText = d["ตำแหน่ง"] || "-";
-                    document.getElementById("empLevel").innerText = d["ระดับ"] || "-";
+                    document.getElementById("empLevel").innerText = d["ระดับ"] ? ` (${d["ระดับ"]})` : "";
+                    document.getElementById("empType").innerText = d["ประเภท"] || "-";
+                    
+                    // แสดงในส่วนตารางรายละเอียดด้านล่าง
+                    document.getElementById("empCitizenId").innerText = d["เลขบัตรประชาชน"] || "-";
+                    document.getElementById("empTypeRow").innerText = d["ประเภท"] || "-";
+                    document.getElementById("empPositionRow").innerText = d["ตำแหน่ง"] || "-";
+                    document.getElementById("empLevelRow").innerText = d["ระดับ"] || "-";
                     document.getElementById("empPosNo").innerText = d["เลขที่ตำแหน่ง"] || "-";
                     document.getElementById("empDept").innerText = d["สังกัด"] || "-";
                     document.getElementById("empBirth").innerText = d["วันเกิด"] || "-";
@@ -155,6 +174,7 @@
                     
                 } else {
                     document.getElementById("statusMessage").innerText = result.message;
+                    document.getElementById("empName").innerText = "ไม่พบข้อมูลประวัติ";
                 }
             } catch (error) {
                 document.getElementById("statusMessage").innerText = "ไม่สามารถติดต่อฐานข้อมูลได้";
