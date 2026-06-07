@@ -3,113 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบเช็คเงินเดือนพนักงาน</title>
+    <title>ระบบสารสนเทศข้อมูลบุคลากร</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-100 p-4">
-    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6 mt-6">
-        <h2 class="text-2xl font-bold text-center text-green-600 mb-4">สลิปเงินเดือนออนไลน์</h2>
+<body class="bg-slate-100 min-h-screen p-4 flex flex-col justify-between">
+    <div class="max-w-md mx-auto w-full">
         
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2">เลือกเดือนที่ต้องการตรวจสอบ:</label>
-            <select id="monthSelect" class="w-full p-2 border border-gray-300 rounded-lg" onchange="fetchSalary()">
-                <option value="มกราคม 2026">มกราคม 2026</option>
-                <option value="กุมภาพันธ์ 2026">กุมภาพันธ์ 2026</option>
-                <option value="มีนาคม 2026">มีนาคม 2026</option>
-            </select>
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-6 border-t-8 border-blue-600">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-6">
+                    <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-id-card-clip text-3xl text-blue-600"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-800 text-center">ข้อมูลประวัติบุคคล</h2>
+                    <p class="text-gray-400 text-xs mt-1">ข้อมูลส่วนบุคคลอิเล็กทรอนิกส์</p>
+                </div>
+
+                <div id="statusMessage" class="text-center text-gray-400 py-6 text-sm italic">
+                    กำลังดึงข้อมูลโปรไฟล์จาก LINE...
+                </div>
+
+                <div id="infoCard" class="space-y-3 text-sm hidden">
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-address-card mr-2 w-5"></i>เลขบัตรประชาชน</span>
+                        <span id="empCitizenId" class="text-gray-800 font-semibold">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-user mr-2 w-5"></i>ชื่อ-นามสกุล</span>
+                        <span id="empName" class="text-gray-800 font-bold text-blue-900">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-tags mr-2 w-5"></i>ประเภท</span>
+                        <span id="empType" class="text-gray-800 font-semibold">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-user-tie mr-2 w-5"></i>ตำแหน่ง</span>
+                        <span id="empPosition" class="text-gray-800 font-semibold">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-arrow-up-trend-lines mr-2 w-5"></i>ระดับ</span>
+                        <span id="empLevel" class="text-gray-800 font-semibold">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-hashtag mr-2 w-5"></i>เลขที่ตำแหน่ง</span>
+                        <span id="empPosNo" class="text-gray-800 font-semibold">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-sitemap mr-2 w-5"></i>สังกัด</span>
+                        <span id="empDept" class="text-gray-800 font-semibold">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-cake-candles mr-2 w-5"></i>วันเกิด</span>
+                        <span id="empBirth" class="text-gray-800 font-semibold">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-person-cake mr-2 w-5"></i>อายุ</span>
+                        <span id="empAge" class="text-gray-800 font-semibold">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-phone mr-2 w-5"></i>เบอร์โทรศัพท์</span>
+                        <span id="empPhone" class="text-gray-800 font-semibold">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-calendar-check mr-2 w-5"></i>วันที่เริ่มเข้ารับราชการ</span>
+                        <span id="empStartDate" class="text-gray-800 font-semibold">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-gray-500"><i class="fa-solid fa-hourglass-half mr-2 w-5"></i>อายุราชการ</span>
+                        <span id="empServiceTime" class="text-blue-700 font-bold">-</span>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <span class="text-gray-500"><i class="fa-solid fa-calendar-xmark mr-2 w-5"></i>วันเกษียณอายุ</span>
+                        <span id="empRetireDate" class="text-red-600 font-bold">-</span>
+                    </div>
+                    
+                </div>
+            </div>
         </div>
 
-        <hr class="my-4 border-gray-200">
-
-        <div id="salaryCard" class="hidden">
-            <p class="text-gray-600"><strong>ชื่อ-นามสกุล:</strong> <span id="empName"></span></p>
-            <p class="text-gray-600 mb-4"><strong>รหัสพนักงาน:</strong> <span id="empId"></span></p>
-            
-            <div class="bg-green-50 p-3 rounded-lg mb-2">
-                <span class="text-gray-700 font-semibold">รายรับรวม:</span>
-                <div class="flex justify-between text-sm text-gray-600 mt-1">
-                    <span>เงินเดือนหลัก:</span> <span id="mainSalary">0</span>
-                </div>
-                <div class="flex justify-between text-sm text-gray-600">
-                    <span>ค่าตำแหน่ง/OT:</span> <span id="allowance">0</span>
-                </div>
-            </div>
-
-            <div class="bg-red-50 p-3 rounded-lg mb-4">
-                <span class="text-gray-700 font-semibold">รายจ่าย/หัก:</span>
-                <div class="flex justify-between text-sm text-gray-600 mt-1">
-                    <span>ประกันสังคม:</span> <span id="sso">0</span>
-                </div>
-                <div class="flex justify-between text-sm text-gray-600">
-                    <span>ภาษีหัก ณ ที่จ่าย:</span> <span id="tax">0</span>
-                </div>
-            </div>
-
-            <div class="border-t-2 border-dashed pt-3 flex justify-between items-center">
-                <span class="text-lg font-bold text-gray-800">รายรับสุทธิ:</span>
-                <span class="text-2xl font-bold text-green-600" id="netSalary">0 บาท</span>
-            </div>
-        </div>
-
-        <div id="statusMessage" class="text-center text-gray-500 my-4">กำลังโหลดข้อมูลโปรไฟล์ LINE...</div>
     </div>
+    
+    <p class="text-center text-gray-400 text-[10px] my-4">ระบบสารสนเทศบุคลากรออนไลน์ v3.5</p>
 
     <script>
+        // ⚠️ อย่าลืมใส่ URL เว็บแอป GAS และ LIFF ID ของคุณตรงนี้
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx1GUmuTWCqA6yMJHY_ygdotjPBIOah-lFT9AI-RgkxSRpGqhDgTmKJcC9spo6_bxxV6Q/exec";
+        const LIFF_ID = "2010314411-PgXLiLAk";
+        
         let lineUserId = "";
 
         async function initLiff() {
             try {
-                // ใส่ LIFF ID ที่ได้จาก LINE Developers Console
-                await liff.init({ liffId: "2010314411-PgXLiLAk" }); 
+                await liff.init({ liffId: LIFF_ID });
                 if (liff.isLoggedIn()) {
                     const profile = await liff.getProfile();
                     lineUserId = profile.userId;
-                    alert("LINE ID ของคุณคือ: " + lineUserId); // เพิ่มบรรทัดนี้เพื่อเช็ค ID
-                    document.getElementById("statusMessage").innerText = "เลือกเดือนเพื่อดูข้อมูลสลิป";
-                    fetchSalary(); // เรียกดูเดือนแรกที่ตั้งค่าไว้ทันที
+                    fetchEmployeeData();
                 } else {
                     liff.login();
                 }
             } catch (error) {
-                console.error("LIFF Initialization failed", error);
-                document.getElementById("statusMessage").innerText = "เกิดข้อผิดพลาดในการโหลดระบบ LINE";
+                document.getElementById("statusMessage").innerText = "การเชื่อมต่อ LINE ล้มเหลว";
             }
         }
 
-        async function fetchSalary() {
+        async function fetchEmployeeData() {
             if (!lineUserId) return;
             
-            const selectedMonth = document.getElementById("monthSelect").value;
-            document.getElementById("statusMessage").innerText = "กำลังดึงข้อมูลเงินเดือน...";
-            document.getElementById("salaryCard").classList.add("hidden");
-
             try {
-                const response = await fetch(`${GAS_API_URL}?userId=${lineUserId}&month=${selectedMonth}`);
+                const response = await fetch(`${GAS_API_URL}?userId=${lineUserId}`);
                 const result = await response.json();
 
                 if (result.status === "success") {
-                    document.getElementById("statusMessage").innerText = "";
-                    document.getElementById("salaryCard").classList.remove("hidden");
+                    document.getElementById("statusMessage").classList.add("hidden");
+                    document.getElementById("infoCard").classList.remove("hidden");
                     
-                    // นำข้อมูลไปใส่ใน HTML Element
-                    document.getElementById("empName").innerText = result.data["ชื่อ-นามสกุล"];
-                    document.getElementById("empId").innerText = result.data["รหัสพนักงาน"];
-                    document.getElementById("mainSalary").innerText = Number(result.data["เงินเดือนหลัก"]).toLocaleString() + " บาท";
-                    document.getElementById("allowance").innerText = Number(result.data["ค่าตำแหน่ง"] + result.data["OT"]).toLocaleString() + " บาท";
-                    document.getElementById("sso").innerText = "-" + Number(result.data["ประกันสังคม"]).toLocaleString() + " บาท";
-                    document.getElementById("tax").innerText = "-" + Number(result.data["ภาษี"]).toLocaleString() + " บาท";
-                    document.getElementById("netSalary").innerText = Number(result.data["รายรับสุทธิ"]).toLocaleString() + " บาท";
+                    const d = result.data;
+                    
+                    // จับคู่ตัวแปรเพื่อแสดงผลให้ตรงกับหัวตารางของ Google Sheets
+                    document.getElementById("empCitizenId").innerText = d["เลขบัตรประชาชน"] || "-";
+                    document.getElementById("empName").innerText = d["ชื่อ-นามสกุล"] || "-";
+                    document.getElementById("empType").innerText = d["ประเภท"] || "-";
+                    document.getElementById("empPosition").innerText = d["ตำแหน่ง"] || "-";
+                    document.getElementById("empLevel").innerText = d["ระดับ"] || "-";
+                    document.getElementById("empPosNo").innerText = d["เลขที่ตำแหน่ง"] || "-";
+                    document.getElementById("empDept").innerText = d["สังกัด"] || "-";
+                    document.getElementById("empBirth").innerText = d["วันเกิด"] || "-";
+                    document.getElementById("empAge").innerText = d["อายุ"] || "-";
+                    document.getElementById("empPhone").innerText = d["เบอร์โทรศัพท์"] || "-";
+                    document.getElementById("empStartDate").innerText = d["วันที่เริ่มเข้ารับราชการ"] || "-";
+                    document.getElementById("empServiceTime").innerText = d["อายุราชการ"] || "-";
+                    document.getElementById("empRetireDate").innerText = d["วันเกษียณอายุ"] || "-";
+                    
                 } else {
                     document.getElementById("statusMessage").innerText = result.message;
                 }
             } catch (error) {
-                document.getElementById("statusMessage").innerText = "ไม่สามารถเชื่อมต่อฐานข้อมูลได้";
+                document.getElementById("statusMessage").innerText = "ไม่สามารถติดต่อฐานข้อมูลได้";
             }
         }
 
-        // เริ่มทำงานเมื่อเปิดหน้าเว็บ
         initLiff();
     </script>
 </body>
