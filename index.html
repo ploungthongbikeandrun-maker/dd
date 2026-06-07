@@ -129,13 +129,54 @@
                             <span class="text-gray-600">เงินค่าตอบแทนเสี่ยงภัย</span>
                             <span id="salHazardous" class="text-gray-800 font-semibold">0.00 ฿</span>
                         </div>
-                        
                         <div class="flex justify-between pt-2 mt-4 bg-amber-50 p-3 rounded-xl">
                             <span class="text-amber-800 font-bold">รวมเงินตอบแทนปัจจุบัน</span>
                             <span id="salTotal" class="text-amber-700 font-black text-base">0.00 ฿</span>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div id="tab-leave" class="tab-content hidden">
+            <div class="bg-white rounded-3xl shadow-xl p-6 border-t-8 border-indigo-600 mb-4">
+                <div class="flex items-center space-x-2 mb-4">
+                    <span class="text-xl">📋</span>
+                    <h3 class="text-lg font-bold text-gray-800">ยื่นใบลา</h3>
+                </div>
+                <p class="text-xs text-gray-500 mb-6">กดปุ่มด้านล่างเพื่อกรอกแบบฟอร์มยื่นวันลา ระบบจะแจ้งหัวหน้าทันทีหลังส่งคำขอ</p>
+                
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-indigo-50/50 rounded-2xl p-4 text-center border border-indigo-100 flex flex-col justify-between">
+                        <span class="text-2xl mb-1">🏖️</span>
+                        <span id="leaveVacation" class="text-2xl font-black text-indigo-600 my-1">0</span>
+                        <span class="text-xs font-medium text-indigo-500">พักร้อน</span>
+                        <div class="w-full bg-gray-200 h-1.5 rounded-full mt-2 overflow-hidden">
+                            <div class="bg-indigo-500 h-full w-2/3 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="bg-teal-50/50 rounded-2xl p-4 text-center border border-teal-100 flex flex-col justify-between">
+                        <span class="text-2xl mb-1">🏠</span>
+                        <span id="leavePersonal" class="text-2xl font-black text-teal-600 my-1">0</span>
+                        <span class="text-xs font-medium text-teal-500">ลากิจ</span>
+                        <div class="w-full bg-gray-200 h-1.5 rounded-full mt-2 overflow-hidden">
+                            <div class="bg-teal-500 h-full w-1/2 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="bg-emerald-50/50 rounded-2xl p-4 text-center border border-emerald-100 flex flex-col justify-between">
+                        <span class="text-2xl mb-1">🏥</span>
+                        <span id="leaveSick" class="text-2xl font-black text-emerald-600 my-1">0</span>
+                        <span class="text-xs font-medium text-emerald-500">ลาป่วย</span>
+                        <div class="w-full bg-gray-200 h-1.5 rounded-full mt-2 overflow-hidden">
+                            <div class="bg-emerald-500 h-full w-4/5 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="https://forms.google.com" target="_blank" class="w-full bg-[#0f172a] hover:bg-[#1e293b] text-white font-medium text-sm py-4 px-6 rounded-2xl flex items-center justify-center space-x-2 transition-all shadow-lg shadow-gray-200">
+                    <span>🦙</span>
+                    <span>กรอกใบลาเดี๋ยวนี้</span>
+                </a>
             </div>
         </div>
 
@@ -156,9 +197,6 @@
                             <p class="text-xs text-gray-500">ติดต่อ งานทรัพยากรบุคคล อบต.พลวงทอง</p>
                         </div>
                     </div>
-                    <div class="p-4 bg-blue-50 text-blue-800 rounded-2xl text-xs leading-relaxed">
-                        <i class="fa-solid fa-circle-info mr-1"></i> <strong>หมายเหตุ:</strong> หากข้อมูลรายการเงินค่าตอบแทนปัจจุบันไม่ถูกต้องหรือไม่อัปเดต สามารถประสานงานเจ้าหน้าที่ผู้ดูแลระบบสลิปเพื่อปรับปรุงข้อมูลในฐานข้อมูลหลักได้ครับ
-                    </div>
                 </div>
             </div>
         </div>
@@ -175,7 +213,12 @@
             
             <button onclick="switchTab('tab-salary', this)" id="btn-salary" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
                 <i class="fa-solid fa-money-check-dollar text-xl mb-1"></i>
-                <span class="text-[10px]">เงินเดือนปัจจุบัน</span>
+                <span class="text-[10px]">เงินเดือน</span>
+            </button>
+
+            <button onclick="switchTab('tab-leave', this)" id="btn-leave" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
+                <i class="fa-solid fa-calendar-plus text-xl mb-1"></i>
+                <span class="text-[10px]">ยื่นวันลา</span>
             </button>
             
             <button onclick="switchTab('tab-contact', this)" id="btn-contact" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
@@ -203,12 +246,15 @@
 
             document.getElementById('btn-profile').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
             document.getElementById('btn-salary').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
+            document.getElementById('btn-leave').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
             document.getElementById('btn-contact').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
 
             if(tabId === 'tab-profile') {
                 buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-blue-600 font-bold transition-all";
             } else if(tabId === 'tab-salary') {
                 buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-amber-500 font-bold transition-all";
+            } else if(tabId === 'tab-leave') {
+                buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-indigo-600 font-bold transition-all";
             } else if(tabId === 'tab-contact') {
                 buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-green-600 font-bold transition-all";
             }
@@ -246,7 +292,7 @@
 
                 if (result.status === "success") {
                     document.getElementById("statusMessage").classList.add("hidden");
-                    document.getElementById("tab-profile").classList.remove("hidden"); // แสดงหน้าแรก
+                    document.getElementById("tab-profile").classList.remove("hidden");
                     
                     const d = result.data;
                     
@@ -269,7 +315,7 @@
                     document.getElementById("empServiceTime").innerText = d["อายุราชการ"] || "-";
                     document.getElementById("empRetireDate").innerText = d["วันเกษียณอายุ"] || "-";
                     
-                    // 2. ผูกข้อมูลหน้าเงินเดือนปัจจุบัน (ดึงตามชื่อคอลลัมน์ที่คุณกำหนด)
+                    // 2. ผูกข้อมูลหน้าเงินเดือนปัจจุบัน
                     const nComp = Number(d["เงินค่าตอบแทน"] || 0);
                     const nCol = Number(d["เงินเพิ่มค่าครองชีพชั่วคราว"] || 0);
                     const nPos = Number(d["เงินประจำตำแหน่ง"] || 0);
@@ -285,6 +331,11 @@
                     document.getElementById("salExtra").innerText = nExtra.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
                     document.getElementById("salHazardous").innerText = nHazard.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
                     document.getElementById("salTotal").innerText = nTotal.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
+                    
+                    // 3. ผูกข้อมูลจำนวนวันลาคงเหลือจาก Google Sheets (NEW)
+                    document.getElementById("leaveVacation").innerText = d["วันลาพักร้อนคงเหลือ"] || "0";
+                    document.getElementById("leavePersonal").innerText = d["วันลากิจคงเหลือ"] || "0";
+                    document.getElementById("leaveSick").innerText = d["วันลาป่วยคงเหลือ"] || "0";
                     
                 } else {
                     document.getElementById("statusMessage").innerText = result.message;
