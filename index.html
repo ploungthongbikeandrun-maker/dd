@@ -17,9 +17,15 @@
         <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-6 border-t-8 border-blue-600">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-6">
-                    <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-3 overflow-hidden border-4 border-white shadow-md">
-                        <img id="lineProfileImg" src="" alt="Profile" class="w-full h-full object-cover hidden">
-                        <i id="defaultUserIcon" class="fa-solid fa-user-tie text-4xl text-blue-400"></i>
+                    
+                    <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-3 overflow-hidden border-4 border-white shadow-md relative">
+                        
+                        <div id="defaultUserIcon" class="w-full h-full flex items-center justify-center bg-blue-50">
+                            <i class="fa-solid fa-user-tie text-4xl text-blue-400"></i>
+                        </div>
+                        
+                        <img id="lineProfileImg" src="" alt="Profile" class="absolute inset-0 w-full h-full object-cover hidden">
+                        
                     </div>
                     
                     <h2 id="empName" class="text-xl font-bold text-gray-800 text-center">กำลังโหลดข้อมูล...</h2>
@@ -106,10 +112,10 @@
 
     </div>
     
-    <p class="text-center text-gray-400 text-[10px] my-4">ระบบสารสนเทศบุคลากรออนไลน์ v4.1</p>
+    <p class="text-center text-gray-400 text-[10px] my-4">ระบบสารสนเทศบุคลากรออนไลน์ v4.2</p>
 
     <script>
-        // ⚠️ ใส่ URL เว็บแอป GAS และ LIFF ID ของคุณตรงนี้
+        // ⚠️ อย่าลืมใส่ URL เว็บแอป GAS และ LIFF ID ของคุณตรงนี้
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx1GUmuTWCqA6yMJHY_ygdotjPBIOah-lFT9AI-RgkxSRpGqhDgTmKJcC9spo6_bxxV6Q/exec";
         const LIFF_ID = "2010314411-PgXLiLAk";
         
@@ -122,11 +128,11 @@
                     const profile = await liff.getProfile();
                     lineUserId = profile.userId;
                     
-                    // 📸 ดึงรูปโปรไฟล์ และ ชื่อจาก LINE มาแสดงผลทันที
+                    // 📸 จัดการซ่อนไอคอนเก่าและแสดงรูปโปรไฟล์ LINE แบบเต็มวงกลม
                     if (profile.pictureUrl) {
                         document.getElementById("lineProfileImg").src = profile.pictureUrl;
                         document.getElementById("lineProfileImg").classList.remove("hidden");
-                        document.getElementById("defaultUserIcon").classList.add("hidden");
+                        document.getElementById("defaultUserIcon").classList.add("hidden"); // ซ่อนไอคอนเงาคนสีฟ้า
                     }
                     document.getElementById("lineDisplayName").innerText = profile.displayName || "-";
                     
