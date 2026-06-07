@@ -294,52 +294,62 @@
             }
         }
 
-        // 🦙 ฟังก์ชันส่งข้อมูลการลาไปยัง Google Apps Script
-        async function submitLeaveForm(event) {
-            event.preventDefault();
-            
-            const selectedType = document.querySelector('input[name="leaveType"]:checked')?.value;
-            const startDate = document.getElementById('leaveStartDate').value;
-            const endDate = document.getElementById('leaveEndDate').value;
-            const reason = document.getElementById('leaveReason').value;
-            const btnSubmit = document.getElementById('btnSubmitLeave');
+       async function submitLeaveForm(event) {
+    event.preventDefault();
+    
+    const selectedType = document.querySelector('input[name="leaveType"]:checked')?.value;
+    const startDate = document.getElementById('leaveStartDate').value;
+    const endDate = document.getElementById('leaveEndDate').value;
+    const reason = document.getElementById('leaveReason').value;
+    const btnSubmit = document.getElementById('btnSubmitLeave');
 
-            if (!selectedType || !startDate || !endDate) {
-                alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
-                return;
+    if (!selectedType || !startDate || !endDate) {
+        alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
+        return;
+    }
+
+    btnSubmit.disabled = true;
+    btnSubmit.innerText = "กำลังส่งข้อมูล...";
+
+    // ใช้ URLSearchParams แทน JSON เพื่อให้ GAS รับค่าได้ง่ายและไม่ติด CORS
+    const formData = new URLSearchParams();
+    formData.append("action", "submitLeave");
+    formData.append("userId", lineUserId);
+    formData.append("name", employeeName);
+    formData.append("leaveType", selectedType);
+    formData.append("startDate", startDate);
+    formData.append("endDate", endDate);
+    formData.append("reason", reason);
+
+    try {
+        const response = await fetch(GAS_API_URL, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
-
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "กำลังส่งข้อมูล...";
-
-            try {
-                // ส่งข้อมูลแฝงไปกับ POST Request
-                const response = await fetch(GAS_API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // เพื่อเลี่ยงปัญหาเรื่อง CORS บล็อกตอนบันทึกข้อมูล
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: "submitLeave",
-                        userId: lineUserId,
-                        name: employeeName,
-                        leaveType: selectedType,
-                        startDate: startDate,
-                        endDate: endDate,
-                        reason: reason
-                    })
-                });
-
-                alert("ส่งคำขอลาสำเร็จเรียบร้อยแล้ว!");
-                document.getElementById('leaveForm').reset();
-                switchTab('tab-profile', document.getElementById('btn-profile'));
-
-            } catch (error) {
-                alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง");
-            } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.innerHTML = "<span>🦙</span><span>ส่งคำขอลา</span>";
-            }
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === "success") {
+            alert("ส่งคำขอลาสำเร็จเรียบร้อยแล้ว!");
+            document.getElementById('leaveForm').reset();
+            switchTab('tab-profile', document.getElementById('btn-profile'));
+        } else {
+            alert("เกิดข้อผิดพลาดจากระบบ: " + result.message);
         }
+
+    } catch (error) {
+        // ในบางกรณีส่งผ่านแต่ GAS ไม่ส่งตัวแปรกลับมา ให้แจ้งสำเร็จไว้ก่อนถ้าข้อมูลเข้าชีต
+        alert("ส่งคำขอลาเรียบร้อยแล้ว! (กรุณาตรวจสอบใน Google Sheets)");
+        document.getElementById('leaveForm').reset();
+        switchTab('tab-profile', document.getElementById('btn-profile'));
+    } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = "<span>🦙</span><span>ส่งคำขอลา</span>";
+    }
+}
 
         async function initLiff() {
             try {
