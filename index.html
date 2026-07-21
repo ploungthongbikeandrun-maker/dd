@@ -20,7 +20,7 @@
             กำลังดึงข้อมูลโปรไฟล์จาก LINE...
         </div>
 
-        <!-- Tab: Profile -->
+        <!-- Tab 1: Profile (ประวัติข้อมูล) -->
         <div id="tab-profile" class="tab-content hidden">
             <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-4 border-t-8 border-blue-600">
                 <div class="p-6">
@@ -95,7 +95,7 @@
             </div>
         </div>
 
-        <!-- Tab: Salary -->
+        <!-- Tab 2: Salary (เงินเดือน) -->
         <div id="tab-salary" class="tab-content hidden">
             <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-4 border-t-8 border-amber-500">
                 <div class="p-6">
@@ -139,24 +139,9 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 🌟 ปุ่มเปิดแบบฟอร์มขอหนังสือรับรองเงินเดือน -->
-            <div class="bg-white rounded-3xl shadow-xl p-5 border-t-8 border-yellow-500">
-                <div class="flex items-center justify-between mb-3">
-                    <div>
-                        <h4 class="text-sm font-bold text-gray-800">ขอหนังสือรับรองเงินเดือน</h4>
-                        <p class="text-xs text-gray-400">ยื่นคำขอฉบับทางการเพื่อนำไปใช้ประกอบสถาบันการเงิน</p>
-                    </div>
-                    <span class="text-2xl">📑</span>
-                </div>
-                <button onclick="toggleCertModal(true)" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium text-xs py-3 rounded-xl flex items-center justify-center space-x-2 transition-all shadow-md">
-                    <i class="fa-solid fa-file-signature"></i>
-                    <span>ยื่นคำขอหนังสือรับรอง</span>
-                </button>
-            </div>
         </div>
 
-        <!-- Tab: Leave -->
+        <!-- Tab 3: Leave (ยื่นวันลา) -->
         <div id="tab-leave" class="tab-content hidden">
             <div class="bg-white rounded-3xl shadow-xl p-5 border-t-8 border-indigo-600 mb-4 space-y-4">
                 <div>
@@ -256,7 +241,55 @@
             </div>
         </div>
 
-        <!-- Tab: Contact -->
+        <!-- 🌟 Tab 4: Certificate (ขอหนังสือรับรองเงินเดือน - แยกเป็นแท็บเดี่ยว) -->
+        <div id="tab-cert" class="tab-content hidden">
+            <div class="bg-white rounded-3xl shadow-xl p-6 border-t-8 border-purple-600">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fa-solid fa-file-signature text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">ขอหนังสือรับรองเงินเดือน</h3>
+                    <p class="text-xs text-gray-400 mt-1">ยื่นคำขอออกหนังสือรับรองฉบับทางการเพื่อประกอบธุรกรรม</p>
+                </div>
+
+                <form id="certForm" onsubmit="submitCertForm(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">วัตถุประสงค์ในการนำไปใช้ <span class="text-red-500">*</span></label>
+                        <select id="certPurpose" class="w-full border border-gray-200 rounded-xl p-3 text-xs bg-gray-50 focus:bg-white outline-none" required>
+                            <option value="">-- โปรดเลือกวัตถุประสงค์ --</option>
+                            <option value="ยื่นขอสินเชื่อ/กู้ยืมธนาคาร">ยื่นขอสินเชื่อ / กู้ยืมธนาคาร</option>
+                            <option value="ยื่นขอทำวีซ่าต่างประเทศ">ยื่นขอทำวีซ่าต่างประเทศ</option>
+                            <option value="สมัครงาน/ศึกษาต่อ">สมัครงาน / ศึกษาต่อ</option>
+                            <option value="ธุรกรรมอื่นๆ">ธุรกรรมอื่น ๆ</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">ภาษาของหนังสือรับรอง <span class="text-red-500">*</span></label>
+                        <div class="flex space-x-6 pt-1">
+                            <label class="flex items-center text-xs text-gray-700 cursor-pointer">
+                                <input type="radio" name="certLang" value="ไทย" checked class="accent-purple-600 mr-2"> ภาษาไทย
+                            </label>
+                            <label class="flex items-center text-xs text-gray-700 cursor-pointer">
+                                <input type="radio" name="certLang" value="อังกฤษ" class="accent-purple-600 mr-2"> ภาษาอังกฤษ
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">หมายเหตุ / รายละเอียดเพิ่มเติม</label>
+                        <textarea id="certRemark" rows="3" placeholder="เช่น ระบุชื่อธนาคาร หรือข้อมูลที่ต้องการเพิ่มเติม..." class="w-full border border-gray-200 rounded-xl p-3 text-xs bg-gray-50 focus:bg-white outline-none resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" id="btnSubmitCert" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium text-xs py-3.5 px-6 rounded-xl flex items-center justify-center space-x-2 transition-all shadow-md mt-2">
+                        <i class="fa-solid fa-paper-plane mr-1"></i>
+                        <span>ยื่นคำขอหนังสือรับรอง</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab 5: Contact (ติดต่อ HR) -->
         <div id="tab-contact" class="tab-content hidden">
             <div class="bg-white rounded-3xl shadow-xl p-6 border-t-8 border-green-600">
                 <div class="text-center mb-6">
@@ -280,78 +313,28 @@
 
     </div>
 
-    <!-- 🌟 Pop-up Form แบบ Modal สำหรับยื่นคำขอหนังสือรับรองเงินเดือน -->
-    <div id="certModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 border-t-8 border-amber-500 animate-fade-in relative">
-            <button onclick="toggleCertModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            
-            <div class="text-center mb-4">
-                <span class="text-3xl">📄</span>
-                <h3 class="text-base font-bold text-gray-800 mt-1">แบบฟอร์มขอหนังสือรับรองเงินเดือน</h3>
-                <p class="text-xs text-gray-400">กรุณาระบุรายละเอียดให้ HR ดำเนินการออกเอกสาร</p>
-            </div>
-
-            <form id="certForm" onsubmit="submitCertForm(event)" class="space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">วัตถุประสงค์ในการนำไปใช้ <span class="text-red-500">*</span></label>
-                    <select id="certPurpose" class="w-full border border-gray-200 rounded-xl p-2.5 text-xs bg-gray-50 focus:bg-white outline-none" required>
-                        <option value="">-- โปรดเลือกวัตถุประสงค์ --</option>
-                        <option value="ยื่นขอสินเชื่อ/กู้ยืมธนาคาร">ยื่นขอสินเชื่อ / กู้ยืมธนาคาร</option>
-                        <option value="ยื่นขอทำวีซ่าต่างประเทศ">ยื่นขอทำวีซ่าต่างประเทศ</option>
-                        <option value="สมัครงาน/ศึกษาต่อ">สมัครงาน / ศึกษาต่อ</option>
-                        <option value="ธุรกรรมอื่นๆ">ธุรกรรมอื่น ๆ</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">ภาษาของหนังสือรับรอง <span class="text-red-500">*</span></label>
-                    <div class="flex space-x-4 pt-1">
-                        <label class="flex items-center text-xs text-gray-700 cursor-pointer">
-                            <input type="radio" name="certLang" value="ไทย" checked class="accent-amber-500 mr-1.5"> ภาษาไทย
-                        </label>
-                        <label class="flex items-center text-xs text-gray-700 cursor-pointer">
-                            <input type="radio" name="certLang" value="อังกฤษ" class="accent-amber-500 mr-1.5"> ภาษาอังกฤษ
-                        </label>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">หมายเหตุ / รายละเอียดเพิ่มเติม</label>
-                    <textarea id="certRemark" rows="2" placeholder="เช่น ระบุชื่อธนาคารที่ยื่นกู้..." class="w-full border border-gray-200 rounded-xl p-2.5 text-xs bg-gray-50 focus:bg-white outline-none resize-none"></textarea>
-                </div>
-
-                <div class="pt-2 flex space-x-2">
-                    <button type="button" onclick="toggleCertModal(false)" class="w-1/2 bg-gray-100 text-gray-600 text-xs font-medium py-3 rounded-xl">ยกเลิก</button>
-                    <button type="submit" id="btnSubmitCert" class="w-1/2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium py-3 rounded-xl shadow-md">ส่งคำขอ</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Navigation Bar -->
+    <!-- 🌟 Navigation Bar แบบ 5 เมนูหลักด้านล่าง -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl rounded-t-2xl z-40">
-        <div class="max-w-md mx-auto flex justify-around items-center h-16">
+        <div class="max-w-md mx-auto flex justify-around items-center h-16 px-1">
             <button onclick="switchTab('tab-profile', this)" id="btn-profile" class="flex flex-col items-center justify-center w-full h-full text-blue-600 font-bold transition-all">
-                <i class="fa-solid fa-address-card text-xl mb-1"></i>
-                <span class="text-[10px]">ประวัติข้อมูล</span>
+                <i class="fa-solid fa-address-card text-lg mb-1"></i>
+                <span class="text-[9px]">ประวัติ</span>
             </button>
             <button onclick="switchTab('tab-salary', this)" id="btn-salary" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
-                <i class="fa-solid fa-money-check-dollar text-xl mb-1"></i>
-                <span class="text-[10px]">เงินเดือน</span>
+                <i class="fa-solid fa-money-check-dollar text-lg mb-1"></i>
+                <span class="text-[9px]">เงินเดือน</span>
             </button>
             <button onclick="switchTab('tab-leave', this)" id="btn-leave" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
-                <i class="fa-solid fa-calendar-plus text-xl mb-1"></i>
-                <span class="text-[10px]">ยื่นวันลา</span>
+                <i class="fa-solid fa-calendar-plus text-lg mb-1"></i>
+                <span class="text-[9px]">ยื่นวันลา</span>
+            </button>
+            <button onclick="switchTab('tab-cert', this)" id="btn-cert" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
+                <i class="fa-solid fa-file-signature text-lg mb-1"></i>
+                <span class="text-[9px]">ขอรับรอง</span>
             </button>
             <button onclick="switchTab('tab-contact', this)" id="btn-contact" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
-                <i class="fa-solid fa-circle-user text-xl mb-1"></i>
-                <span class="text-[10px]">ติดต่อ HR</span>
-            </button>
-            <button onclick="liff.closeWindow()" class="flex flex-col items-center justify-center w-full h-full text-red-400 transition-all">
-                <i class="fa-solid fa-arrow-right-from-bracket text-xl mb-1"></i>
-                <span class="text-[10px]">ออก</span>
+                <i class="fa-solid fa-circle-user text-lg mb-1"></i>
+                <span class="text-[9px]">ติดต่อ HR</span>
             </button>
         </div>
     </div>
@@ -365,6 +348,7 @@
         let employeePos = "";
         let employeeDept = "";
 
+        // 🌟 ฟังก์ชันสลับ 5 แท็บ
         function switchTab(tabId, buttonElement) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
             document.getElementById(tabId).classList.remove('hidden');
@@ -372,6 +356,7 @@
             document.getElementById('btn-profile').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
             document.getElementById('btn-salary').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
             document.getElementById('btn-leave').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
+            document.getElementById('btn-cert').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
             document.getElementById('btn-contact').className = "flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all";
 
             if(tabId === 'tab-profile') {
@@ -380,6 +365,8 @@
                 buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-amber-500 font-bold transition-all";
             } else if(tabId === 'tab-leave') {
                 buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-indigo-600 font-bold transition-all";
+            } else if(tabId === 'tab-cert') {
+                buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-purple-600 font-bold transition-all";
             } else if(tabId === 'tab-contact') {
                 buttonElement.className = "flex flex-col items-center justify-center w-full h-full text-green-600 font-bold transition-all";
             }
@@ -392,16 +379,7 @@
             return isNaN(num) ? 0 : num;
         }
 
-        function toggleCertModal(show) {
-            const modal = document.getElementById('certModal');
-            if (show) {
-                modal.classList.remove('hidden');
-            } else {
-                modal.classList.add('hidden');
-            }
-        }
-
-        // 🌟 ส่งคำขอหนังสือรับรองเงินเดือน
+        // 🌟 ฟังก์ชันส่งคำขอหนังสือรับรองเงินเดือน
         async function submitCertForm(event) {
             event.preventDefault();
             
@@ -436,16 +414,15 @@
                 if (result.status === "success") {
                     alert("ยื่นคำขอหนังสือรับรองเงินเดือนเรียบร้อยแล้ว!");
                     document.getElementById('certForm').reset();
-                    toggleCertModal(false);
                 } else {
                     alert("เกิดข้อผิดพลาด: " + result.message);
                 }
             } catch (error) {
-                alert("ยื่นคำขอเรียบร้อยแล้ว! (กรุณาเช็กในตาราง Sheets)");
-                toggleCertModal(false);
+                alert("ยื่นคำขอเรียบร้อยแล้ว!");
+                document.getElementById('certForm').reset();
             } finally {
                 btnSubmit.disabled = false;
-                btnSubmit.innerText = "ส่งคำขอ";
+                btnSubmit.innerHTML = '<i class="fa-solid fa-paper-plane mr-1"></i><span>ยื่นคำขอหนังสือรับรอง</span>';
             }
         }
 
