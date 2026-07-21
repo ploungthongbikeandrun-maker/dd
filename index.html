@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap');
         body { font-family: 'Sarabun', sans-serif; }
         ::-webkit-scrollbar { display: none; }
     </style>
@@ -19,6 +20,7 @@
             กำลังดึงข้อมูลโปรไฟล์จาก LINE...
         </div>
 
+        <!-- Tab: Profile -->
         <div id="tab-profile" class="tab-content hidden">
             <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-4 border-t-8 border-blue-600">
                 <div class="p-6">
@@ -93,6 +95,7 @@
             </div>
         </div>
 
+        <!-- Tab: Salary -->
         <div id="tab-salary" class="tab-content hidden">
             <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-4 border-t-8 border-amber-500">
                 <div class="p-6">
@@ -136,34 +139,74 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 🌟 ปุ่มเปิดแบบฟอร์มขอหนังสือรับรองเงินเดือน -->
+            <div class="bg-white rounded-3xl shadow-xl p-5 border-t-8 border-yellow-500">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-800">ขอหนังสือรับรองเงินเดือน</h4>
+                        <p class="text-xs text-gray-400">ยื่นคำขอฉบับทางการเพื่อนำไปใช้ประกอบสถาบันการเงิน</p>
+                    </div>
+                    <span class="text-2xl">📑</span>
+                </div>
+                <button onclick="toggleCertModal(true)" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium text-xs py-3 rounded-xl flex items-center justify-center space-x-2 transition-all shadow-md">
+                    <i class="fa-solid fa-file-signature"></i>
+                    <span>ยื่นคำขอหนังสือรับรอง</span>
+                </button>
+            </div>
         </div>
 
+        <!-- Tab: Leave -->
         <div id="tab-leave" class="tab-content hidden">
-            <div class="bg-white rounded-3xl shadow-xl p-5 border-t-8 border-indigo-600 mb-4">
-                <div class="flex items-center space-x-2 mb-2">
-                    <span class="text-xl">📋</span>
-                    <h3 class="text-lg font-bold text-gray-800">โควตาวันลาคงเหลือ</h3>
+            <div class="bg-white rounded-3xl shadow-xl p-5 border-t-8 border-indigo-600 mb-4 space-y-4">
+                <div>
+                    <div class="flex items-center space-x-2 mb-2">
+                        <span class="text-xl">📋</span>
+                        <h3 class="text-sm font-bold text-gray-800">โควตาวันลาคงเหลือ</h3>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="bg-indigo-50/50 rounded-2xl p-3 text-center border border-indigo-100">
+                            <span class="text-xl">🏖️</span>
+                            <div id="leaveVacation" class="text-xl font-black text-indigo-600 my-0.5">0</div>
+                            <span class="text-[10px] font-medium text-indigo-500">ลาพักร้อนคงเหลือ</span>
+                        </div>
+                        <div class="bg-teal-50/50 rounded-2xl p-3 text-center border border-teal-100">
+                            <span class="text-xl">🏠</span>
+                            <div id="leavePersonal" class="text-xl font-black text-teal-600 my-0.5">0</div>
+                            <span class="text-[10px] font-medium text-teal-500">ลากิจคงเหลือ</span>
+                        </div>
+                        <div class="bg-emerald-50/50 rounded-2xl p-3 text-center border border-emerald-100">
+                            <span class="text-xl">🏥</span>
+                            <div id="leaveSick" class="text-xl font-black text-emerald-600 my-0.5">0</div>
+                            <span class="text-[10px] font-medium text-emerald-500">ลาป่วยคงเหลือ</span>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="grid grid-cols-3 gap-3 mb-2">
-                    <div class="bg-indigo-50/50 rounded-2xl p-3 text-center border border-indigo-100">
-                        <span class="text-xl">🏖️</span>
-                        <div id="leaveVacation" class="text-xl font-black text-indigo-600 my-0.5">0</div>
-                        <span class="text-[10px] font-medium text-indigo-500">ลาพักร้อน</span>
+
+                <!-- วันลาที่ใช้ไป -->
+                <div class="border-t border-dashed border-gray-200 pt-3">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <span class="text-xl">📊</span>
+                        <h3 class="text-sm font-bold text-gray-800">วันลาที่ใช้ไปแล้ว</h3>
                     </div>
-                    <div class="bg-teal-50/50 rounded-2xl p-3 text-center border border-teal-100">
-                        <span class="text-xl">🏠</span>
-                        <div id="leavePersonal" class="text-xl font-black text-teal-600 my-0.5">0</div>
-                        <span class="text-[10px] font-medium text-teal-500">ลากิจส่วนตัว</span>
-                    </div>
-                    <div class="bg-emerald-50/50 rounded-2xl p-3 text-center border border-emerald-100">
-                        <span class="text-xl">🏥</span>
-                        <div id="leaveSick" class="text-xl font-black text-emerald-600 my-0.5">0</div>
-                        <span class="text-[10px] font-medium text-emerald-500">ลาป่วย</span>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="bg-slate-50 rounded-2xl p-2.5 text-center border border-slate-200">
+                            <div id="usedVacation" class="text-lg font-bold text-slate-700">0</div>
+                            <span class="text-[10px] font-medium text-slate-500">ใช้ลาพักร้อน</span>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-2.5 text-center border border-slate-200">
+                            <div id="usedPersonal" class="text-lg font-bold text-slate-700">0</div>
+                            <span class="text-[10px] font-medium text-slate-500">ใช้ลากิจ</span>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-2.5 text-center border border-slate-200">
+                            <div id="usedSick" class="text-lg font-bold text-slate-700">0</div>
+                            <span class="text-[10px] font-medium text-slate-500">ใช้ลาป่วย</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- ฟอร์มขอลา -->
             <div class="bg-white rounded-3xl shadow-xl p-5 border-t-8 border-slate-700">
                 <h3 class="text-sm font-bold text-gray-800 mb-4"><i class="fa-solid fa-pen-to-square text-indigo-500 mr-2"></i>รายละเอียดการขอลา</h3>
                 
@@ -213,6 +256,7 @@
             </div>
         </div>
 
+        <!-- Tab: Contact -->
         <div id="tab-contact" class="tab-content hidden">
             <div class="bg-white rounded-3xl shadow-xl p-6 border-t-8 border-green-600">
                 <div class="text-center mb-6">
@@ -236,34 +280,79 @@
 
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl rounded-t-2xl z-50">
-        <div class="max-w-md mx-auto flex justify-around items-center h-16">
+    <!-- 🌟 Pop-up Form แบบ Modal สำหรับยื่นคำขอหนังสือรับรองเงินเดือน -->
+    <div id="certModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 border-t-8 border-amber-500 animate-fade-in relative">
+            <button onclick="toggleCertModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
             
+            <div class="text-center mb-4">
+                <span class="text-3xl">📄</span>
+                <h3 class="text-base font-bold text-gray-800 mt-1">แบบฟอร์มขอหนังสือรับรองเงินเดือน</h3>
+                <p class="text-xs text-gray-400">กรุณาระบุรายละเอียดให้ HR ดำเนินการออกเอกสาร</p>
+            </div>
+
+            <form id="certForm" onsubmit="submitCertForm(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">วัตถุประสงค์ในการนำไปใช้ <span class="text-red-500">*</span></label>
+                    <select id="certPurpose" class="w-full border border-gray-200 rounded-xl p-2.5 text-xs bg-gray-50 focus:bg-white outline-none" required>
+                        <option value="">-- โปรดเลือกวัตถุประสงค์ --</option>
+                        <option value="ยื่นขอสินเชื่อ/กู้ยืมธนาคาร">ยื่นขอสินเชื่อ / กู้ยืมธนาคาร</option>
+                        <option value="ยื่นขอทำวีซ่าต่างประเทศ">ยื่นขอทำวีซ่าต่างประเทศ</option>
+                        <option value="สมัครงาน/ศึกษาต่อ">สมัครงาน / ศึกษาต่อ</option>
+                        <option value="ธุรกรรมอื่นๆ">ธุรกรรมอื่น ๆ</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">ภาษาของหนังสือรับรอง <span class="text-red-500">*</span></label>
+                    <div class="flex space-x-4 pt-1">
+                        <label class="flex items-center text-xs text-gray-700 cursor-pointer">
+                            <input type="radio" name="certLang" value="ไทย" checked class="accent-amber-500 mr-1.5"> ภาษาไทย
+                        </label>
+                        <label class="flex items-center text-xs text-gray-700 cursor-pointer">
+                            <input type="radio" name="certLang" value="อังกฤษ" class="accent-amber-500 mr-1.5"> ภาษาอังกฤษ
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">หมายเหตุ / รายละเอียดเพิ่มเติม</label>
+                    <textarea id="certRemark" rows="2" placeholder="เช่น ระบุชื่อธนาคารที่ยื่นกู้..." class="w-full border border-gray-200 rounded-xl p-2.5 text-xs bg-gray-50 focus:bg-white outline-none resize-none"></textarea>
+                </div>
+
+                <div class="pt-2 flex space-x-2">
+                    <button type="button" onclick="toggleCertModal(false)" class="w-1/2 bg-gray-100 text-gray-600 text-xs font-medium py-3 rounded-xl">ยกเลิก</button>
+                    <button type="submit" id="btnSubmitCert" class="w-1/2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium py-3 rounded-xl shadow-md">ส่งคำขอ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl rounded-t-2xl z-40">
+        <div class="max-w-md mx-auto flex justify-around items-center h-16">
             <button onclick="switchTab('tab-profile', this)" id="btn-profile" class="flex flex-col items-center justify-center w-full h-full text-blue-600 font-bold transition-all">
                 <i class="fa-solid fa-address-card text-xl mb-1"></i>
                 <span class="text-[10px]">ประวัติข้อมูล</span>
             </button>
-            
             <button onclick="switchTab('tab-salary', this)" id="btn-salary" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
                 <i class="fa-solid fa-money-check-dollar text-xl mb-1"></i>
                 <span class="text-[10px]">เงินเดือน</span>
             </button>
-
             <button onclick="switchTab('tab-leave', this)" id="btn-leave" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
                 <i class="fa-solid fa-calendar-plus text-xl mb-1"></i>
                 <span class="text-[10px]">ยื่นวันลา</span>
             </button>
-            
             <button onclick="switchTab('tab-contact', this)" id="btn-contact" class="flex flex-col items-center justify-center w-full h-full text-gray-400 transition-all">
                 <i class="fa-solid fa-circle-user text-xl mb-1"></i>
                 <span class="text-[10px]">ติดต่อ HR</span>
             </button>
-            
             <button onclick="liff.closeWindow()" class="flex flex-col items-center justify-center w-full h-full text-red-400 transition-all">
                 <i class="fa-solid fa-arrow-right-from-bracket text-xl mb-1"></i>
                 <span class="text-[10px]">ออก</span>
             </button>
-            
         </div>
     </div>
 
@@ -272,7 +361,9 @@
         const LIFF_ID = "2010314411-PgXLiLAk";
         
         let lineUserId = "";
-        let employeeName = ""; // เก็บชื่อไว้สำหรับบันทึกใบลา
+        let employeeName = ""; 
+        let employeePos = "";
+        let employeeDept = "";
 
         function switchTab(tabId, buttonElement) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
@@ -294,61 +385,117 @@
             }
         }
 
-        // 🦙 ฟังก์ชันส่งข้อมูลการลาไปยัง Google Apps Script
-    async function submitLeaveForm(event) {
-    event.preventDefault();
-    
-    const selectedType = document.querySelector('input[name="leaveType"]:checked')?.value;
-    const startDate = document.getElementById('leaveStartDate').value;
-    const endDate = document.getElementById('leaveEndDate').value;
-    const reason = document.getElementById('leaveReason').value;
-    const btnSubmit = document.getElementById('btnSubmitLeave');
-
-    if (!selectedType || !startDate || !endDate) {
-        alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
-        return;
-    }
-
-    btnSubmit.disabled = true;
-    btnSubmit.innerText = "กำลังส่งข้อมูล...";
-
-    // 🦙 เปลี่ยนมาใช้วิธีต่อท้าย URL ส่งไปแบบ GET ธรรมดา (เสถียรสุดบน GitHub Pages และ LIFF)
-    const params = new URLSearchParams({
-        action: "submitLeave",
-        userId: lineUserId || "-",
-        name: employeeName || "-",
-        leaveType: selectedType,
-        startDate: startDate,
-        endDate: endDate,
-        reason: reason || "-"
-    });
-
-    try {
-        const response = await fetch(`${GAS_API_URL}?${params.toString()}`, {
-            method: 'GET'
-        });
-        
-        const result = await response.json();
-        
-        if (result.status === "success") {
-            alert("ส่งคำขอลาสำเร็จเรียบร้อยแล้ว!");
-            document.getElementById('leaveForm').reset();
-            switchTab('tab-profile', document.getElementById('btn-profile'));
-            fetchEmployeeData(); // สั่งให้อัปเดตโควตาวันลาหน้าแรกใหม่ทันที
-        } else {
-            alert("เกิดข้อผิดพลาด: " + result.message);
+        function parseCurrency(value) {
+            if (!value) return 0;
+            const cleanValue = value.toString().replace(/,/g, '').trim();
+            const num = Number(cleanValue);
+            return isNaN(num) ? 0 : num;
         }
 
-    } catch (error) {
-        // แผนสำรองกรณีเครือข่ายบล็อกแต่ข้อมูลเข้า
-        alert("ส่งคำขอลาเรียบร้อยแล้ว! (กรุณาเช็กในตาราง Sheets อีกครั้ง)");
-        document.getElementById('leaveForm').reset();
-        switchTab('tab-profile', document.getElementById('btn-profile'));
-    } finally {
-        btnSubmit.disabled = false;
-        btnSubmit.innerHTML = "<span>🦙</span><span>ส่งคำขอลา</span>";
-    }
-}
+        function toggleCertModal(show) {
+            const modal = document.getElementById('certModal');
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // 🌟 ส่งคำขอหนังสือรับรองเงินเดือน
+        async function submitCertForm(event) {
+            event.preventDefault();
+            
+            const purpose = document.getElementById('certPurpose').value;
+            const language = document.querySelector('input[name="certLang"]:checked')?.value || "ไทย";
+            const remark = document.getElementById('certRemark').value;
+            const btnSubmit = document.getElementById('btnSubmitCert');
+
+            if (!purpose) {
+                alert("กรุณาระบุวัตถุประสงค์ในการยื่นขอหนังสือรับรอง");
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "กำลังส่งคำขอ...";
+
+            const params = new URLSearchParams({
+                action: "requestSalaryCert",
+                userId: lineUserId || "-",
+                name: employeeName || "-",
+                position: employeePos || "-",
+                dept: employeeDept || "-",
+                purpose: purpose,
+                language: language,
+                remark: remark || "-"
+            });
+
+            try {
+                const response = await fetch(`${GAS_API_URL}?${params.toString()}`, { method: 'GET' });
+                const result = await response.json();
+                
+                if (result.status === "success") {
+                    alert("ยื่นคำขอหนังสือรับรองเงินเดือนเรียบร้อยแล้ว!");
+                    document.getElementById('certForm').reset();
+                    toggleCertModal(false);
+                } else {
+                    alert("เกิดข้อผิดพลาด: " + result.message);
+                }
+            } catch (error) {
+                alert("ยื่นคำขอเรียบร้อยแล้ว! (กรุณาเช็กในตาราง Sheets)");
+                toggleCertModal(false);
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "ส่งคำขอ";
+            }
+        }
+
+        async function submitLeaveForm(event) {
+            event.preventDefault();
+            
+            const selectedType = document.querySelector('input[name="leaveType"]:checked')?.value;
+            const startDate = document.getElementById('leaveStartDate').value;
+            const endDate = document.getElementById('leaveEndDate').value;
+            const reason = document.getElementById('leaveReason').value;
+            const btnSubmit = document.getElementById('btnSubmitLeave');
+
+            if (!selectedType || !startDate || !endDate) {
+                alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "กำลังส่งข้อมูล...";
+
+            const params = new URLSearchParams({
+                action: "submitLeave",
+                userId: lineUserId || "-",
+                name: employeeName || "-",
+                leaveType: selectedType,
+                startDate: startDate,
+                endDate: endDate,
+                reason: reason || "-",
+                status: "อนุมัติ"
+            });
+
+            try {
+                const response = await fetch(`${GAS_API_URL}?${params.toString()}`, { method: 'GET' });
+                const result = await response.json();
+                
+                if (result.status === "success") {
+                    alert("ส่งคำขอลาสำเร็จเรียบร้อยแล้ว!");
+                    document.getElementById('leaveForm').reset();
+                    fetchEmployeeData(); 
+                } else {
+                    alert("เกิดข้อผิดพลาด: " + result.message);
+                }
+            } catch (error) {
+                alert("ส่งคำขอลาเรียบร้อยแล้ว!");
+                document.getElementById('leaveForm').reset();
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = "<span>🦙</span><span>ส่งคำขอลา</span>";
+            }
+        }
 
         async function initLiff() {
             try {
@@ -386,19 +533,21 @@
                     
                     const d = result.data;
                     employeeName = d["ชื่อ-นามสกุล"] || "ไม่ระบุชื่อ";
+                    employeePos = d["ตำแหน่ง"] || "-";
+                    employeeDept = d["สังกัด"] || "-";
                     
                     // 1. ผูกข้อมูลหน้าประวัติส่วนตัว
                     document.getElementById("empCitizenId").innerText = d["เลขบัตรประชาชน"] || "-";
                     document.getElementById("empName").innerText = employeeName;
                     document.getElementById("empType").innerText = d["ประเภท"] || "-";
-                    document.getElementById("empPosition").innerText = d["ตำแหน่ง"] || "-";
+                    document.getElementById("empPosition").innerText = employeePos;
                     document.getElementById("empLevel").innerText = d["ระดับ"] ? ` (${d["ระดับ"]})` : "";
                     
                     document.getElementById("empTypeRow").innerText = d["ประเภท"] || "-";
-                    document.getElementById("empPositionRow").innerText = d["ตำแหน่ง"] || "-";
+                    document.getElementById("empPositionRow").innerText = employeePos;
                     document.getElementById("empLevelRow").innerText = d["ระดับ"] || "-";
                     document.getElementById("empPosNo").innerText = d["เลขที่ตำแหน่ง"] || "-";
-                    document.getElementById("empDept").innerText = d["สังกัด"] || "-";
+                    document.getElementById("empDept").innerText = employeeDept;
                     document.getElementById("empBirth").innerText = d["วันเกิด"] || "-";
                     document.getElementById("empAge").innerText = d["อายุ"] || "-";
                     document.getElementById("empPhone").innerText = d["เบอร์โทรศัพท์"] || "-";
@@ -406,13 +555,13 @@
                     document.getElementById("empServiceTime").innerText = d["อายุราชการ"] || "-";
                     document.getElementById("empRetireDate").innerText = d["วันเกษียณอายุ"] || "-";
                     
-                    // 2. ผูกข้อมูลหน้าเงินเดือนปัจจุบัน
-                    const nComp = Number(d["เงินค่าตอบแทน"] || 0);
-                    const nCol = Number(d["เงินเพิ่มค่าครองชีพชั่วคราว"] || 0);
-                    const nPos = Number(d["เงินประจำตำแหน่ง"] || 0);
-                    const nAcad = Number(d["เงินวิทยฐานะ"] || 0);
-                    const nExtra = Number(d["ค่าตอบแทนนอกเหนือจากเงินเดือน"] || 0);
-                    const nHazard = Number(d["เงินค่าตอบแทนเสี่ยงภัย"] || 0);
+                    // 2. ข้อมูลหน้าเงินเดือน
+                    const nComp = parseCurrency(d["เงินค่าตอบแทน"]);
+                    const nCol = parseCurrency(d["เงินเพิ่มค่าครองชีพชั่วคราว"]);
+                    const nPos = parseCurrency(d["เงินประจำตำแหน่ง"]);
+                    const nAcad = parseCurrency(d["เงินวิทยฐานะ"]);
+                    const nExtra = parseCurrency(d["ค่าตอบแทนนอกเหนือจากเงินเดือน"]);
+                    const nHazard = parseCurrency(d["เงินค่าตอบแทนเสี่ยงภัย"]);
                     const nTotal = nComp + nCol + nPos + nAcad + nExtra + nHazard;
 
                     document.getElementById("salCompensation").innerText = nComp.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
@@ -423,10 +572,15 @@
                     document.getElementById("salHazardous").innerText = nHazard.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
                     document.getElementById("salTotal").innerText = nTotal.toLocaleString('th-TH', {minimumFractionDigits: 2}) + " ฿";
                     
-                    // 3. ผูกข้อมูลจำนวนวันลาคงเหลือจาก Google Sheets
+                    // 3. ผูกข้อมูลโควตาวันลาคงเหลือ
                     document.getElementById("leaveVacation").innerText = d["วันลาพักร้อนคงเหลือ"] || "0";
                     document.getElementById("leavePersonal").innerText = d["วันลากิจคงเหลือ"] || "0";
                     document.getElementById("leaveSick").innerText = d["วันลาป่วยคงเหลือ"] || "0";
+                    
+                    // 4. ผูกข้อมูลวันลาที่ใช้ไปแล้ว (นับสดจากบันทึกการลา)
+                    document.getElementById("usedVacation").innerText = d["usedVacationDynamic"] || "0";
+                    document.getElementById("usedPersonal").innerText = d["usedPersonalDynamic"] || "0";
+                    document.getElementById("usedSick").innerText = d["usedSickDynamic"] || "0";
                     
                 } else {
                     document.getElementById("statusMessage").innerText = result.message;
